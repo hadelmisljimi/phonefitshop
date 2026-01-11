@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Favorites</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+body { font-family:'Roboto', sans-serif; background:radial-gradient(circle at top,#1a1033 0%,#0b0e1a 60%); color:#e5e7eb; font-size:14px; }
+
+header { background: rgba(20,16,40,0.95); border-bottom:1px solid #2b2f55; backdrop-filter: blur(6px); }
+.logo { font-size: 22px; font-weight:700; color:#8b5cf6; letter-spacing:1px; }
+.top-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 30px; }
+.top-bar nav ul { display:flex; list-style:none; gap:32px; }
+.top-bar nav ul li { position:relative; cursor:pointer; font-weight:500; color:#c7c9ff; transition:color 0.3s, text-shadow 0.3s; }
+.top-bar nav ul li:hover { color:#8b5cf6; text-shadow:0 0 8px rgba(139,92,246,0.9); }
+.top-bar nav ul li::after { content:""; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:#8b5cf6; transition:width 0.3s; }
+.top-bar nav ul li:hover::after { width:100%; }
+
+.cart-badge span, .favorites-badge span {
+    position:absolute; top:-8px; right:-10px; background:#dc2626; color:#fff; font-size:12px; font-weight:700;
+    border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center;
+}
+
+.container { padding:30px; display:flex; flex-direction:column; gap:24px; }
+#favoritesContainer { display:flex; flex-wrap:wrap; gap:18px; }
+.favorite-card { width:180px; background: rgba(20,16,40,0.9); border:1px solid #2b2f55; border-radius:16px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; }
+.favorite-card img { width:150px; height:150px; object-fit:cover; border-radius:14px; }
+.favorite-name { font-size:13px; font-weight:500; text-align:center; color:#e5e7eb; min-height:32px; }
+.favorite-price { font-size:15px; font-weight:700; color:#8b5cf6; }
+.action-btn { flex:1; padding:6px 0; font-size:16px; border-radius:8px; border:1px solid #2b2f55; background:#141028; color:#c7c9ff; cursor:pointer; transition:0.2s; margin-top:4px; }
+.action-btn:hover { transform:scale(1.1); }
+.toast { position:fixed; bottom:30px; right:30px; background:#8b5cf6; color:white; padding:12px 18px; border-radius:12px; font-weight:600; opacity:0; transform:translateY(20px); transition:0.3s; z-index:9999; }
+
+.popup { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; z-index:10000; visibility:hidden; opacity:0; transition:0.3s; }
+.popup.show { visibility:visible; opacity:1; }
+.popup-content { background:#1a1033; padding:24px; border-radius:20px; max-width:400px; width:90%; display:flex; flex-direction:column; align-items:center; gap:12px; position:relative; }
+.popup-content img { width:250px; height:250px; object-fit:cover; border-radius:14px; }
+.popup-content .popup-name { font-size:18px; font-weight:700; color:#8b5cf6; text-align:center; }
+.popup-content .popup-price { font-size:16px; color:#e5e7eb; }
+.popup-content .popup-btns { display:flex; gap:10px; width:100%; }
+.popup-close { position:absolute; top:10px; right:14px; font-size:24px; cursor:pointer; color:#fff; }
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #8b5cf6;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+@media (max-width: 480px) {
+  body {
+    transform: scale(0.75);
+    transform-origin: top center;
+    width: 133%;
+    overflow-x: hidden;
+  }
+}
+
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<header>
+  <div class="top-bar">
+    <div class="logo">PhoneFit</div>
+    <nav>
+      <ul>
+        <li>
+  <a href="index.html" style="text-decoration:none; color:inherit;">
+    Home
+  </a>
+</li>
+
+        <li onclick="goToAbout()">About Us</li>
+        <li onclick="goToShop()">Shop</li>
+        <li class="favorites-badge" onclick="goToFavorites()">❤️ Favorites<span id="favorites-count">0</span></li>
+        <li class="cart-badge" onclick="goToCart()">🛒 Cart<span id="cart-count">0</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <h2>Your Favorites</h2>
+  <div id="favoritesContainer"></div>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <span class="popup-close" onclick="closePopup()">×</span>
+    <img id="popup-img" src="" alt="">
+    <div class="popup-name" id="popup-name"></div>
+    <div class="popup-price" id="popup-price"></div>
+    <div class="popup-btns">
+      <button class="action-btn" id="popup-cart-btn"></button>
+      <button class="action-btn" id="popup-fav-btn"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// NAVIGATION
+function goToHome(){ window.location.href='home.html'; }
+function goToAbout(){ window.location.href='aboutus.html'; }
+function goToShop(){ window.location.href='shop.html'; }
+function goToCart(){ window.location.href='cart.html'; }
+function goToFavorites(){ window.location.href='favorites.html'; }
+
+// ==================== BADGES ====================
+function updateCartCountBadge() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    document.getElementById('cart-count').innerText = cart.length;
+}
+
+function updateFavoritesCountBadge() {
+    const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    document.getElementById('favorites-count').innerText = favs.length;
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    // Pokreni animaciju
+    setTimeout(() => toast.classList.add('show'), 50);
+    // Sakrij nakon 2 sekunde
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
+}
+
+// ==================== CART FUNCTIONS ====================
+function toggleCart(product, btn){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if(cart.some(c => c.name === product.name)){
+        cart = cart.filter(c => c.name !== product.name);
+        showToast('Removed from cart 🛒');
+        if(btn) btn.innerText='🛒 Add to Cart';
+    } else {
+        cart.push(product);
+        showToast('Added to cart 🛒');
+        if(btn) btn.innerText='🛒 Remove from Cart';
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCountBadge();
+}
+
+// ==================== FAVORITES FUNCTIONS ====================
+function toggleFavorite(product, btn){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    if(favs.some(f => f.name === product.name)){
+        favs = favs.filter(f => f.name !== product.name);
+        showToast('Removed from favorites ❤️');
+        if(btn) btn.innerText = '❤️ Add to Favorites';
+    } else {
+        favs.push(product);
+        showToast('Added to favorites ❤️');
+        if(btn) btn.innerText = '❤️ Remove from Favorites';
+    }
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    updateFavoritesCountBadge();
+}
+
+// ==================== CART FUNCTIONS ====================
+function isInCart(product){
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    return cart.some(c=>c.name===product.name);
+}
+
+
+
+// ==================== FAVORITES FUNCTIONS ====================
+function isInFavorites(product){
+    const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    return favs.some(f=>f.name===product.name);
+}
+
+function addFavorite(product){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    if(!isInFavorites(product)){
+        favs.push(product);
+        localStorage.setItem('favorites', JSON.stringify(favs));
+        updateFavoritesCountBadge();
+        showToast(`Added to favorites ❤️`);
+    }
+}
+
+function removeFavorite(product){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    favs = favs.filter(f=>f.name!==product.name);
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    updateFavoritesCountBadge();
+    showToast(`Removed from favorites ❤️`);
+}
+
+// ==================== POPUP ====================
+const popup = document.getElementById('popup');
+const popupImg = document.getElementById('popup-img');
+const popupName = document.getElementById('popup-name');
+const popupPrice = document.getElementById('popup-price');
+const popupCartBtn = document.getElementById('popup-cart-btn');
+const popupFavBtn = document.getElementById('popup-fav-btn');
+
+function openPopup(product){
+    popupImg.src = product.img;
+    popupName.innerText = product.name;
+    popupPrice.innerText = product.price ? product.price+'€' : '';
+
+    popupCartBtn.innerText = isInCart(product) ? '🛒 Remove from Cart' : '🛒 Add to Cart';
+    popupCartBtn.onclick = ()=>toggleCart(product, popupCartBtn);
+
+    popupFavBtn.innerText = isInFavorites(product) ? '❤️ Remove from Favorites' : '❤️ Add to Favorites';
+    popupFavBtn.onclick = ()=>{
+        if(isInFavorites(product)){
+            removeFavorite(product);
+        } else {
+            addFavorite(product);
+        }
+        popupFavBtn.innerText = isInFavorites(product) ? '❤️ Remove from Favorites' : '❤️ Add to Favorites';
+    };
+
+    popup.classList.add('show');
+}
+
+function closePopup(){ popup.classList.remove('show'); }
+
+// ==================== LOAD FAVORITES ====================
+function showFavorites() {
+    const container = document.getElementById('favoritesContainer');
+    container.innerHTML = '';
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    if(favorites.length===0){
+        container.innerHTML='<p>No favorites added yet.</p>';
+        return;
+    }
+    favorites.forEach(p=>{
+        const card = document.createElement('div');
+        card.className='favorite-card';
+
+        const img = document.createElement('img');
+        img.src=p.img;
+        img.alt=p.name;
+        img.onclick = ()=>openPopup(p);
+
+        const name = document.createElement('div');
+        name.className='favorite-name';
+        name.innerText = p.name;
+
+        const price = document.createElement('div');
+        price.className='favorite-price';
+        price.innerText = p.price ? p.price+'€' : '';
+
+        const btnsDiv = document.createElement('div');
+        btnsDiv.style.display='flex'; btnsDiv.style.gap='6px'; btnsDiv.style.width='100%';
+
+        const favBtn = document.createElement('button');
+        favBtn.className='action-btn';
+        favBtn.innerText='❤️ Remove';
+        favBtn.onclick=()=>removeFavorite(p);
+
+        const cartBtn = document.createElement('button');
+        cartBtn.className='action-btn';
+        cartBtn.innerText = isInCart(p) ? '🛒 Remove from Cart' : '🛒 Add to Cart';
+        cartBtn.onclick = ()=>toggleCart(p, cartBtn);
+
+        btnsDiv.appendChild(favBtn);
+        btnsDiv.appendChild(cartBtn);
+
+        card.appendChild(img);
+        card.appendChild(name);
+        card.appendChild(price);
+        card.appendChild(btnsDiv);
+
+        container.appendChild(card);
+    });
+}
+
+// ==================== INIT ====================
+window.addEventListener('load', ()=>{
+    showFavorites();
+    updateCartCountBadge();
+    updateFavoritesCountBadge();
+});
+
+
+</script>
+</body>
+</html>

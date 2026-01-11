@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoneShop</title>
+<style>
+/* BODY - tamna pozadina i svetliji tekst */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #e0e0e0;
+}
+
+/* HEADER */
+header {
+    background: #1f1f1f;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    cursor: pointer;
+    color: #bbb;
+    transition: 0.3s;
+}
+
+header nav ul li:hover {
+    color: #ffcc00;
+    text-shadow: 0 0 5px #ffcc00;
+}
+
+/* PRODUCTS GRID */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 20px;
+}
+
+/* INDIVIDUAL PRODUCT */
+.product {
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 204, 0, 0.6);
+}
+
+/* PRODUCT IMAGE */
+/* SVE SLIKE ISTE VELIČINE */
+
+.product img {
+    width: 100%;
+    height: 220px;      /* fiksna visina */
+    object-fit: cover;  /* popuni okvir bez deformacije */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+/* UNIFORMNA VISINA ZA NAZIV I CENU */
+.product h3 {
+    min-height: 48px; /* poravnava nazive */
+    margin: 8px 0 4px 0;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.product p {
+    min-height: 20px;  /* poravnava cene */
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+/* DIV SA DUGMADIMA */
+.product .btn-container {
+    display: flex;
+    justify-content: center; /* centrirano */
+    gap: 10px;               /* razmak između dugmadi */
+    margin-bottom: 5px;
+}
+
+
+
+.product img:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+/* NEON EFFECT */
+.product h3, .product p {
+    transition: 0.3s;
+}
+
+.product:hover h3, .product:hover p {
+    color: #ffcc00;
+    text-shadow: 0 0 8px #ffcc00;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 8px 15px;
+    background: #ffcc00;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 5px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #ffd633;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* MODAL CONTENT */
+.modal-content {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    width: 90%;
+    max-width: 450px;
+    padding: 15px;
+    border-radius: 10px;
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+    font-size: 13px;
+}
+
+/* MODAL IMAGE */
+#popupMainImg {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* CLOSE BUTTON */
+.modal-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    color: #ffcc00;
+}
+
+/* COLOR OPTIONS */
+.color-option {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 2px solid #555;
+    transition: transform 0.2s, border 0.2s;
+}
+
+.color-option.selected {
+    border: 2px solid #ffcc00;
+    transform: scale(1.2);
+}
+
+/* ARROWS */
+.arrow-btn {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 5px;
+    color: #ffcc00;
+    user-select: none;
+}
+
+/* IMAGE COUNTER */
+.img-counter {
+    text-align: center;
+    margin: 5px 0;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* SELECT */
+select {
+    background: #2b2b2b;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+/* Favorite button style */
+.favorite-btn {
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 12px;
+    user-select: none;
+    transition: 0.3s;
+}
+
+.fav-btn, .cart-btn {
+    position: relative;
+}
+
+.fav-count, .cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ffcc00;
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 204, 0, 0.8);
+	
+	
+}
+
+
+
+#favPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #222;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-size: 18px;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 99999;
+}
+
+
+
+</style>
+</head>
+<body>
+<div id="favPopup">Dodano u favorites ❤️</div>
+<!-- Add in body -->
+<div id="confirmCartPopup" class="modal" onclick="closeConfirmPopup(event)" style="display:none;">
+    <div class="modal-content" style="max-width:350px; text-align:center;">
+        <p id="confirmCartText" style="margin-bottom:15px;">Add this item to cart?</p>
+        <div style="display:flex; justify-content:center; gap:10px;">
+            <button onclick="confirmAddToCart()" class="btn">Yes</button>
+            <button onclick="cancelAddToCart()" class="btn" style="background:#555; color:#fff;">No</button>
+        </div>
+    </div>
+</div>
+
+
+
+<header>
+    <div class="logo">📱 PhoneShop</div>
+    <nav>
+        <ul>
+            <li onclick="loadCategory('all')">All</li>
+            <li onclick="loadCategory('men')">Men</li>
+            <li onclick="loadCategory('women')">Women</li>
+            <li onclick="loadCategory('screenProtectors')">Screen Protectors</li>
+            <li onclick="loadCategory('phoneHolders')">Phone Holders</li>
+            <li onclick="loadCategory('headphones')">Headphones</li>
+            <li onclick="loadCategory('headphoneMasks')">Headphone Masks</li>
+        </ul>
+    </nav>
+</header>
+
+
+
+
+
+<div class="products" id="productContainer"></div>
+
+<!-- Popup -->
+<div id="productPopup" class="modal" onclick="outsideClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeProductPopup()">X</span>
+        <div style="display:flex;align-items:center;justify-content:center;">
+            <span class="arrow-btn" onclick="prevImg()">❮</span>
+            <div>
+                <img id="popupMainImg" src="">
+                <div id="imgCounter" class="img-counter"></div>
+            </div>
+            <span class="arrow-btn" onclick="nextImg()">❯</span>
+        </div>
+        <h3 id="popupName"></h3>
+        <p id="popupPrice"></p>
+        <div id="colorOptions" style="margin-bottom:10px;"></div>
+        <label>Choose Size:</label>
+        <select id="popupSize">
+            <option value="">Select size</option>
+            <option>Small</option>
+            <option>Medium</option>
+            <option>Large</option>
+        </select>
+        <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+            <button onclick="addPopupToCart()">🛒 Add to Cart</button>
+            <span id="popupFavorite" class="favorite-btn" style="background:#555;color:#fff;">♡</span>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+const products = {
+  men: [
+    { name:"Wallet Case", img:"men/Wallet Case.png", images:["men/Wallet Case1.png","men/Wallet Case2.png","men/Wallet Case3.png"], price:12, colors:["Red","Grey","Brown","Black"] },
+    { name:"Luxury Retro Artificial Leather Phone Case", img:"men/Luxury Retro Artificial Leather Phone Case.png", images:["men/Luxury Retro Artificial Leather Phone Case1.png","men/Luxury Retro Artificial Leather Phone Case2.png","men/Luxury Retro Artificial Leather Phone Case3.png"], price:14, colors:["Brown","Black"] },
+    { name:"Luxurious skin-feeling mobile phone case", img:"men/Luxurious skin-feeling mobile phone case.png", images:["men/Luxurious skin-feeling mobile phone case1.png","men/Luxurious skin-feeling mobile phone case2.png","men/Luxurious skin-feeling mobile phone case3.png"], price:12, colors:["Red","Blue","Greeen","Black"] },
+    { name:"Luxury Mirror Flip Shell", img:"men/Luxury Mirror Flip Shell.png", images:["men/Luxury Mirror Flip Shell.png"], price:12, colors:["Black"] },
+    { name:"Heavy-Duty Shockproof Phone Case", img:"men/Heavy-Duty Shockproof Phone Case.png", images:["men/Heavy-Duty Shockproof Phone Case1.png","men/Heavy-Duty Shockproof Phone Case2.png"], price:12, colors:["Black"] },
+    { name:"Super-Slim Crystal-Clear Phone Case", img:"men/Super-Slim Crystal-Clear Phone Case.png", images:["men/Super-Slim Crystal-Clear Phone Case1.png","men/Super-Slim Crystal-Clear Phone Case2.png","men/Super-Slim Crystal-Clear Phone Case3.png"], price:10, colors:["Transparent"] },
+    { name:"Case with Slide Camera Cover Protective Case", img:"men/Case with Slide Camera Cover Protective Case.png", images:["men/Case with Slide Camera Cover Protective Case1.png","men/Case with Slide Camera Cover Protective Case2.png","men/Case with Slide Camera Cover Protective Case3.png"], price:15, colors:["Black","Blue"] },
+    { name:"Aviation Time Rotating Pattern Phone Case", img:"men/Aviation Time Rotating Pattern Phone Case.png", images:["men/Aviation Time Rotating Pattern Phone Case1.png","men/Aviation Time Rotating Pattern Phone Case2.png"], price:13, colors:["Grey"] },
+    { name:"Creative Airplane Track Sheepskin Mobile Phone Case", img:"men/Creative Airplane Track Sheepskin Mobile Phone Case.png", images:["men/Creative Airplane Track Sheepskin Mobile Phone Case1.png","men/Creative Airplane Track Sheepskin Mobile Phone Case2.png","men/Creative Airplane Track Sheepskin Mobile Phone Case3.png","men/Creative Airplane Track Sheepskin Mobile Phone Case4.png"], price:12, colors:["Blue","Green","Grey","Black"] },
+    { name:"Luxurious Shockproof Minimalist Phone Case", img:"men/Luxurious Shockproof Minimalist Phone Case.png", images:["men/Luxurious Shockproof Minimalist Phone Case1.png","men/Luxurious Shockproof Minimalist Phone Case2.png","men/Luxurious Shockproof Minimalist Phone Case3.png","men/Luxurious Shockproof Minimalist Phone Case4.png","men/Luxurious Shockproof Minimalist Phone Case5.png"], price:12, colors:["Red","Brown","Black","Grey","Blue"] }
+  ],
+  women: [
+    { name:"Pink Flower Case", img:"women/Pink Flower Case.png", images:["women/Pink Flower Case1.png"], price:14, colors:["Gradient"] },
+    { name:"2025 High Quality Case", img:"women/2025 High Quality Case.png", images:["women/2025 High Quality Case.png"], price:15, colors:["DarkPink"] },
+    { name:"Artistict Colortul Case", img:"women/Artistict Colortul Case.png", images:["women/Artistict Colortul Case.png"], price:12, colors:["Colorful"] },
+    { name:"Colortul Heart Phone Case", img:"women/Colortul Heart Phone Case.png", images:["women/Colortul Heart Phone Case.png"], price:12, colors:["Colorful"] },
+    { name:"Cute Panda Case", img:"women/Cute Panda Case.png", images:["women/Cute Panda Case.png"], price:13, colors:["Red"] },
+    { name:"Flowers Pattern Case", img:"women/Flowers Pattern Case.png", images:["women/Flowers Pattern Case1.png","women/Flowers Pattern Case2.png"], price:14, colors:["Green","Pink"] },
+    { name:"Soft Case Pink Butterfly", img:"women/Soft Case Pink Butterfly.png", images:["women/Soft Case Pink Butterfly1.png","women/Soft Case Pink Butterfly2.png"], price:12, colors:["White","Black"] },
+    { name:"Soft Gradient Case", img:"women/Soft Gradient Case.png", images:["women/Soft Gradient Case.png"], price:11, colors:["Black"] },
+    { name:"Love Square Phone Case", img:"women/Love Square Phone Case.png", images:["women/Love Square Phone Case1.png","women/Love Square Phone Case2.png","women/Love Square Phone Case3.png","women/Love Square Phone Case4.png","women/Love Square Phone Case5.png"], price:15, colors:["Pink","White","Red","Blue","Green"] },
+    { name:"Luxury Shockproof Plating Magnetic Wireless Charge Case", img:"women/Luxury Shockproof Plating Magnetic Wireless Charge Case.png", images:["women/Luxury Shockproof Plating Magnetic Wireless Charge Case1.png","women/Luxury Shockproof Plating Magnetic Wireless Charge Case2.png","women/Luxury Shockproof Plating Magnetic Wireless Charge Case3.png"], price:18, colors:["Pink","Purple","Blue"] },
+    { name:"Rose Golden Heart", img:"women/Rose Golden Heart.png", images:["women/Rose Golden Heart.png"], price:13, colors:["Pink"] },
+    { name:"Simple Dark Black Rose Pattern", img:"women/Simple Dark Black Rose Pattern.png", images:["women/Simple Dark Black Rose Pattern.png"], price:12, colors:["Black"] },
+    { name:"Stylish And Attractive Phone Case", img:"women/Stylish And Attractive Phone Case.png", images:["women/Stylish And Attractive Phone Case1.png","women/Stylish And Attractive Phone Case2.png"], price:14, colors:["Blue","Pink"] }
+  ]
+};
+
+
+// --------- GLOBALNE PROMENLJIVE ---------
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let currentProduct = null, currentImages = [], currentIndex = 0, selectedColor = "";
+
+// --------- LOAD CATEGORY ---------
+function loadCategory(cat){
+    const container = document.getElementById("productContainer");
+    container.innerHTML = "";
+    let list = (cat==="all") ? [...products.men,...products.women] : products[cat];
+
+    list.forEach(prod=>{
+        const div = document.createElement("div");
+        div.className="product";
+        div.innerHTML = `
+        <img src="${prod.img}">
+        <h3>${prod.name}</h3>
+        <p>${prod.price}$</p>
+        <div class="btn-container">
+            <button class="btn add-to-cart">🛒 Add to Cart</button>
+            <span class="btn favorite-btn" id="fav-${prod.name.replace(/\s+/g,'')}" style="background:#555;color:#fff;">♡</span>
+        </div>`;
+        container.appendChild(div);
+
+        div.querySelector("img").addEventListener("click", ()=>openPopup(prod));
+        div.querySelector(".add-to-cart").addEventListener("click", ()=>openPopup(prod));
+
+        const favBtn = div.querySelector(".favorite-btn");
+        favBtn.addEventListener("click", ()=>{
+            const favIndex = favorites.findIndex(f => f.name === prod.name);
+            if(favIndex === -1){
+                favorites.push(prod);
+                favBtn.textContent = '❤';
+                favBtn.style.color = 'red';
+            } else {
+                favorites.splice(favIndex, 1);
+                favBtn.textContent = '♡';
+                favBtn.style.color = '#fff';
+            }
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            updateFooterCounts();
+        });
+    });
+}
+
+// --------- ADD TO CART (POPUP) ---------
+function addPopupToCart() {
+    const size = document.getElementById("popupSize").value;
+    if(!selectedColor || !size){ alert("Select color and size!"); return; }
+
+    // Save pending item info
+    pendingAddProduct = currentProduct;
+    pendingAddColor = selectedColor;
+    pendingAddSize = size;
+
+    // Show confirmation popup
+    document.getElementById("confirmCartText").textContent = 
+        `Add "${currentProduct.name}" to cart?`;
+    document.getElementById("confirmCartPopup").style.display = "flex";
+}
+function confirmAddToCart() {
+    cart.push({
+        name: pendingAddProduct.name,
+        img: pendingAddProduct.images[0] || pendingAddProduct.img,
+        price: pendingAddProduct.price,
+        color: pendingAddColor,
+        size: pendingAddSize
+    });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateFooterCounts();
+
+    // Close both popups
+    document.getElementById("confirmCartPopup").style.display = "none";
+    closeProductPopup();
+    
+    alert(`${pendingAddProduct.name} added to cart!`);
+    
+    // Clear pending
+    pendingAddProduct = null;
+    pendingAddColor = "";
+    pendingAddSize = "";
+}
+
+function cancelAddToCart() {
+    document.getElementById("confirmCartPopup").style.display = "none";
+    pendingAddProduct = null;
+    pendingAddColor = "";
+    pendingAddSize = "";
+}
+
+function closeConfirmPopup(e) {
+    if(e.target === document.getElementById("confirmCartPopup")) cancelAddToCart();
+}
+
+
+
+// --------- UPDATE FOOTER COUNTS ---------
+function updateFooterCounts(){
+    document.querySelector(".cart-count").textContent = cart.length;
+    document.querySelector(".fav-count").textContent = favorites.length;
+}
+
+// --------- POPUP LOGIKA ---------
+function openPopup(prod){
+    currentProduct = prod;
+    currentImages = [prod.img, ...(prod.images || [])];
+    currentIndex = 0;
+    selectedColor = "";
+
+    document.getElementById("popupMainImg").src = currentImages[currentIndex];
+    document.getElementById("imgCounter").textContent = `Image ${currentIndex+1} of ${currentImages.length}`;
+    document.getElementById("popupName").textContent = prod.name;
+    document.getElementById("popupPrice").textContent = prod.price + "$";
+
+    const colorDiv = document.getElementById("colorOptions");
+    colorDiv.innerHTML = "Colors: ";
+    (prod.colors || []).forEach(c=>{
+        const span = document.createElement("span");
+        span.className = "color-option";
+        span.style.backgroundColor = c.toLowerCase();
+        span.title = c;
+        span.onclick = ()=>{
+            selectedColor = c;
+            colorDiv.querySelectorAll(".color-option").forEach(e=>e.classList.remove("selected"));
+            span.classList.add("selected");
+        };
+        colorDiv.appendChild(span);
+    });
+
+    const popupFavBtn = document.getElementById("popupFavorite");
+    if(favorites.find(f => f.name === prod.name)){
+        popupFavBtn.textContent = '❤';
+        popupFavBtn.style.color = 'red';
+    } else {
+        popupFavBtn.textContent = '♡';
+        popupFavBtn.style.color = '#fff';
+    }
+
+    popupFavBtn.onclick = ()=>{
+        const favIndex = favorites.findIndex(f => f.name === prod.name);
+        if(favIndex === -1){
+            favorites.push(prod);
+            popupFavBtn.textContent = '❤';
+            popupFavBtn.style.color = 'red';
+        } else {
+            favorites.splice(favIndex, 1);
+            popupFavBtn.textContent = '♡';
+            popupFavBtn.style.color = '#fff';
+        }
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+        updateFooterCounts();
+    };
+
+    document.getElementById("popupSize").value = "";
+    document.getElementById("productPopup").style.display = "flex";
+}
+
+function closeProductPopup(){ document.getElementById("productPopup").style.display = "none"; }
+function outsideClick(e){ if(e.target === document.getElementById("productPopup")) closeProductPopup(); }
+function prevImg(){ if(!currentImages) return; currentIndex = (currentIndex-1+currentImages.length)%currentImages.length; document.getElementById("popupMainImg").src=currentImages[currentIndex]; document.getElementById("imgCounter").textContent=`Image ${currentIndex+1} of ${currentImages.length}`; }
+function nextImg(){ if(!currentImages) return; currentIndex = (currentIndex+1)%currentImages.length; document.getElementById("popupMainImg").src=currentImages[currentIndex]; document.getElementById("imgCounter").textContent=`Image ${currentIndex+1} of ${currentImages.length}`; }
+
+window.onload = () => {
+    loadCategory("all");
+    updateFooterCounts();
+};
+</script>
+
+
+
+<script>
+
+let pendingAddProduct = null;
+let pendingAddColor = "";
+let pendingAddSize = "";
+
+/* UČITAVANJE PODATAKA IZ localStorage */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+// Funkcija za update brojača u footeru
+function updateFooterCounts() {
+    document.querySelector(".cart-count").textContent = cart.length;
+    document.querySelector(".fav-count")?.textContent = favorites.length;
+}
+	
+
+// Dodavanje proizvoda u cart
+function addToCart(product, color = "", size = ""){
+    if(color === "" || size === ""){
+        alert("Please select color and size!");
+        return;
+    }
+
+    cart.push({
+        name: product.name,
+        img: product.img,
+        price: product.price,
+        color: color,
+        size: size
+    });
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateFooterCounts();
+
+    alert(`${product.name} added to cart!`);
+}
+
+// Kada se stranica učita
+window.onload = () => {
+    loadCategory("all");
+    updateFooterCounts();
+};
+
+
+function toggleFavorite(prod) {
+    const heart = document.getElementById(`fav-${prod.id}`);
+
+    if (!heart) {
+        console.error("Favorite heart not found:", `fav-${prod.id}`);
+        return;
+    }
+
+    if (heart.classList.contains("active-fav")) {
+        heart.classList.remove("active-fav");
+        showFavPopup("Uklonjeno iz favorites ❌");
+    } else {
+        heart.classList.add("active-fav");
+        showFavPopup("Dodano u favorites ❤️");
+    }
+}
+
+
+
+function showFavPopup(message) {
+    const popup = document.getElementById("favPopup");
+
+    if (!popup) {
+        console.error("favPopup not found in HTML!");
+        return;
+    }
+
+    popup.textContent = message;
+    popup.style.display = "block";
+
+    setTimeout(() => {
+        popup.style.opacity = "1";
+    }, 10);
+
+    setTimeout(() => {
+        popup.style.opacity = "0";
+        setTimeout(() => popup.style.display = "none", 300);
+    }, 2000);
+}
+
+
+
+
+
+/* Poziv kada se stranica otvori */
+updateFooterCounts();
+
+function updateFooterCounts(){
+    let fav = JSON.parse(localStorage.getItem("favorites")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    document.querySelector(".fav-count").textContent = fav.length;
+    document.querySelector(".cart-count").textContent = cart.length;
+}
+
+window.onload = () => {
+    loadCategory("all");
+    updateFooterCounts();
+};
+
+
+
+</script>
+
+
+<!-- FOOTER -->
+<footer class="footer-nav">
+    <div class="footer-buttons">
+        <a href="home.html" class="footer-btn">
+            <span class="icon">🏠</span> Home
+        </a>
+
+        <a href="about.html" class="footer-btn">
+            <span class="icon">ℹ️</span> About Us
+        </a>
+
+        <a href="favorites.html" class="footer-btn fav-btn">
+          <span class="icon">❤️</span>Favorites
+         </a>
+
+
+<a href="cart.html" class="footer-btn cart-btn">
+    🛒 <span class="cart-count">0</span> Cart
+</a>
+
+
+		
+		
+    </div>
+</footer>
+
+<style>
+/* TANJI FOOTER */
+.footer-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 8px 0; /* tanje */
+    background: linear-gradient(135deg, #0e0e0e, #1b1b1b);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Red sa dugmićima */
+.footer-buttons {
+    display: flex;
+    gap: 18px;
+}
+
+/* Tanja, čistija dugmad */
+.footer-btn {
+    color: #e8e8e8;
+    padding: 6px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.25s;
+}
+
+.footer-btn:hover {
+    color: #ffcc00;
+    border-color: #ffcc00;
+    background: rgba(255, 204, 0, 0.12);
+}
+
+/* IKONICE */
+.icon {
+    font-size: 17px;
+}
+
+/* CART BROJAČ */
+.cart-btn {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ffcc00;
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 204, 0, 0.8);
+}
+</style>
+
+<script>
+/* GLOBALNA PROMENLJIVA */
+let cartItems = 0;
+
+/* FUNKCIJA ZA DODAVANJE U KORPU */
+function addToCart() {
+    cartItems++;
+    document.getElementById("cartCount").textContent = cartItems;
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoneFit</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ================= GLOBAL ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: radial-gradient(circle at top, #1a1033 0%, #0b0e1a 60%);
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: rgba(20, 16, 40, 0.95);
+  border-bottom: 1px solid #2b2f55;
+  backdrop-filter: blur(6px);
+}
+
+
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #8b5cf6;
+  letter-spacing: 1px;
+}
+
+.account {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.account select {
+  padding: 6px 8px;
+  background: #141028;
+  color: #8b5cf6;
+  border: 1px solid #2b2f55;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+
+/* ================= CONTAINER ================= */
+.container {
+  display: flex;
+  padding: 30px;
+  gap: 24px;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 250px;
+  background: rgba(20, 16, 40, 0.9);
+  border: 1px solid #2b2f55;
+  border-radius: 10px;
+}
+
+.sidebar h3 {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8b5cf6;
+  border-bottom: 1px solid #2b2f55;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  padding: 12px 18px;
+  border-bottom: 1px solid #2b2f55;
+  cursor: pointer;
+  font-size: 13px;
+  color: #e5e7eb;
+  transition: 0.2s;
+}
+
+.sidebar li:hover {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+/* ================= MAIN ================= */
+.main {
+  flex: 1;
+}
+
+/* ================= BANNER ================= */
+.banner {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.75) contrast(1.2) saturate(1.1);
+}
+
+/* ================= PRODUCT GRID ================= */
+#productContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  gap: 18px;
+}
+
+#productContainer img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 1px solid #2b2f55;
+  transition: 0.25s;
+}
+
+#productContainer img:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.35);
+}
+
+/* ================= MODAL ================= */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 30, 0.85);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #1a1033, #0b0e1a);
+  padding: 30px 40px;
+  border-radius: 16px;
+  border: 1px solid #2b2f55;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  min-width: 320px;
+}
+
+.modal-content button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  transition: 0.3s;
+}
+
+.modal-content button:hover {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+  transform: translateY(-2px);
+}
+
+.modal-content input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #2b2f55;
+  background: #141028;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.modal-content input::placeholder {
+  color: #8b5cf6;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  padding: 10px 40px 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #2b2f55;
+  background: #141028;
+  color: #e5e7eb;
+  font-size: 14px;
+  width: 100%;
+}
+
+.input-wrapper input::placeholder {
+  color: #8b5cf6;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #FFD700;
+  user-select: none;
+  transition: 0.3s;
+}
+
+.toggle-pass:hover {
+  color: #FFD700;
+  text-shadow: 0 0 0px #FFD700;
+
+}
+
+/* ================= IMAGE MODAL ================= */
+#imageModal .modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: row; 
+  gap: 50px;
+  max-width: 1200px;
+  width: 90%;
+  padding: 30px 40px;
+  background: #0f0a24;
+  border-radius: 16px;
+  border: 1px solid #2b2f55;
+  color: #e5e7eb;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+#imageModal .modal-left {
+  flex: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#imageModal .product-main-image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#imageModal .product-main-image {
+  width: 420px;
+  height: 420px;
+  object-fit: contain;
+  background: #0b0e1a;
+  border-radius: 20px;
+}
+
+#imageModal .side-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(139, 92, 246, 0.2);
+  border: none;
+  color: #ffffff;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+#imageModal .side-btn:first-of-type { left: -40px; }
+#imageModal .side-btn:last-of-type { right: -50px; }
+
+#imageModal .side-btn:hover {
+  background: #8b5cf6;
+}
+
+#imageModal .img-counter {
+  margin-top: 12px;
+  color: #8b5cf6;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* ================= MODAL RIGHT ================= */
+#imageModal .modal-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-left: 1px solid #2b2f55; /* linija */
+  padding-left: 50px; /* veći razmak od slike */
+  margin-left: 40px;  /* dodatni razmak, opcionalno */
+  overflow-y: auto;
+  max-height: calc(90vh - 60px);
+  padding-right: 10px;
+}
+
+
+#imageModal .modal-right h3 {
+  font-size: 30px;
+  color: #ffffff;
+}
+
+#imageModal .choose-color-btn,
+#imageModal .buy-btn {
+  padding: 15px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ffffff;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+#imageModal .choose-color-btn:hover,
+#imageModal .buy-btn:hover {
+  box-shadow: 0 12px 35px rgba(139, 92, 246, 0.45);
+}
+
+/* ================= OPTIONS ================= */
+#imageModal .color-dot,
+#imageModal .phone-model {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #2b2f55;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#imageModal .color-dot.active,
+#imageModal .phone-model.active {
+  background: #8b5cf6;
+  color: #ffffff;
+  border-color: #8b5cf6;
+  transform: scale(1.1);
+}
+
+/* ================= CLOSE BUTTON ================= */
+#imageModal .modal-content .modal-close {
+    position: absolute;
+    top: 12px;        /* od vrha popup-a */
+    right: 12px;      /* od desnog ruba popup-a */
+    font-size: 28px;
+    cursor: pointer;
+    color: #c7c9ff;
+    z-index: 10;
+    transition: 0.2s;
+}
+
+#imageModal .modal-content .modal-close:hover {
+    color: #8b5cf6;
+    transform: scale(1.2);
+}
+.product-card {
+  width: 180px;
+  background: rgba(20, 16, 40, 0.9);
+  border: 1px solid #2b2f55;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: 0.25s;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.35);
+}
+
+.product-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.product-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #e5e7eb;
+  text-align: center;
+  min-height: 32px; /* poravnava visinu imena */
+}
+
+.product-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #8b5cf6;
+}
+.product-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #2b2f55;
+  background: #141028;
+  color: #c7c9ff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.action-btn.active {
+  background: #8b5cf6;
+  color: #fff;
+  border-color: #8b5cf6;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+/* NOTIFICATION */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #8b5cf6;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.3s;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+}
+.sidebar li.active {
+  background: rgba(139, 92, 246, 0.25);
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+/* ===== HEADER LAYOUT FIX ===== */
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 30px;
+}
+
+.top-bar nav ul li {
+  position: relative;
+  cursor: pointer;
+  font-weight: 500;
+  color: #c7c9ff;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+.top-bar nav ul li:hover {
+  color: #8b5cf6;
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.9);
+}
+
+.top-bar nav ul li:hover::after {
+  width: 100%;
+}
+
+.top-bar nav ul li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #8b5cf6;
+  transition: width 0.3s;
+}
+
+.top-bar nav ul {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+}
+
+
+.account-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 30px 12px;
+  border-top: 1px solid #2b2f55;
+}
+
+.account {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+#cart-count-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #f43f5e; /* crvena/ljubičasta po izboru */
+  color: white;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(255,0,0,0.5);
+}
+header {
+  background: rgba(20,16,40,0.95);
+  border-bottom: 1px solid #2b2f55;
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top:0;
+  z-index:1000;
+}
+
+.logo {
+  font-size:22px;
+  font-weight:700;
+  color:#8b5cf6;
+  letter-spacing:1px;
+}
+
+.top-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 30px;
+}
+
+.top-bar nav ul {
+  display:flex;
+  list-style:none;
+  gap:32px;
+  align-items:center;
+}
+
+.top-bar nav ul li {
+  position:relative;
+  cursor:pointer;
+  font-weight:500;
+  color:#c7c9ff;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.top-bar nav ul li:hover {
+  color:#8b5cf6;
+  text-shadow:0 0 8px rgba(139,92,246,0.9);
+}
+
+.top-bar nav ul li::after {
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:#8b5cf6;
+  transition:width 0.3s;
+}
+
+.top-bar nav ul li:hover::after {
+  width:100%;
+}
+
+.cart-badge span, .favorites-badge span {
+  position:absolute;
+  top:-8px;
+  right:-10px;
+  background:#dc2626;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  border-radius:50%;
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .top-bar { flex-direction: column; gap:12px; }
+  .top-bar nav ul { flex-wrap:wrap; gap:16px; justify-content:center; }
+}
+@media (max-width: 480px) {
+  body {
+    transform: scale(0.75);
+    transform-origin: top center;
+    width: 133%;
+    overflow-x: hidden;
+  }
+}
+
+
+</style>
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<header>
+
+  <!-- GORNJI RED: logo + NAV -->
+  <div class="top-bar">
+    <div class="logo">PhoneFit</div>
+
+    <nav>
+      <ul>
+        <li>
+  <a href="index.html" style="text-decoration:none; color:inherit;">
+    Home
+  </a>
+</li>
+
+        <li onclick="goToAbout()"> About Us</li>
+        <li onclick="goToShop()"> Shop</li>
+        <li class="favorites-badge" onclick="goToFavorites()">
+          ❤️ Favorites<span id="favorites-count">0</span>
+        </li>
+        <li onclick="goToCart()" class="cart-icon">
+  🛒 Cart
+  <span id="cart-count-badge">0</span>
+</li>
+
+		<div class="account">
+  
+</div>
+
+      </ul>
+    </nav>
+  </div>
+
+  <!-- DONJI RED: login + valuta -->
+  <div class="account-row">
+    <div class="account">
+      <span id="choiceBtn" style="cursor:pointer;">Login / Create Account / Explore</span>
+      <select id="currencySelector">
+        <option value="EUR">EUR</option>
+        <option value="USD">USD</option>
+        <option value="BGN">BGN</option>
+      </select>
+    </div>
+  </div>
+
+</header>
+
+
+<div class="container">
+  <aside class="sidebar">
+    <h3>Categories</h3>
+	<ul>
+	<!-- Sortiranje -->
+<li data-sort="desc" onclick="showCategory(null, 'desc')">Sort by highest price</li>
+<li data-sort="asc" onclick="showCategory(null, 'asc')">Sort by lowest price</li>
+<li data-category="all" onclick="showCategory('all')">All</li>
+<li data-category="men" onclick="showCategory('men')">Men</li>
+<li data-category="women" onclick="showCategory('women')">Women</li>
+<li data-category="phoneholders" onclick="showCategory('Phoneholders')">Phone Holders</li>
+<li data-category="screenprotectors" onclick="showCategory('screenProtectors')">Screen Protectors</li>
+<li data-category="headphones" onclick="showCategory('headphones')">Headphones</li>
+<li data-category="masks" onclick="showCategory('masksForHeadphones')">Masks for Headphones</li>
+
+</ul>
+
+  </aside>
+
+  <main class="main">
+    <section class="banner">
+  <img src="Caseimg.png" alt="New Product" class="banner-img">
+  
+</section>
+
+
+    <div id="productContainer"></div>
+  </main>
+</div>
+
+
+<!-- LOGIN / CREATE / CHOICE MODALS -->
+<div id="choiceModal" class="modal">
+  <div class="modal-content">
+    <h3>Welcome! Please choose:</h3>
+    <button onclick="openLogin()">Login</button>
+    <button onclick="openCreate()">Create Account</button>
+    <button onclick="exploreWithoutAccount()">Explore without account</button>
+  </div>
+</div>
+
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal('loginModal')">&times;</span>
+    <h3>Login</h3>
+    <input id="loginEmail" placeholder="Email" type="email">
+    <div class="input-wrapper">
+  <input id="loginPassword" placeholder="Password" type="password">
+  <span class="toggle-pass" onclick="togglePass('loginPassword', this)"></span>
+</div>
+
+    <button onclick="loginUser()">Login</button>
+  </div>
+</div>
+
+<div id="createModal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal('createModal')">&times;</span>
+    <h3>Create Account</h3>
+    <input id="createName" placeholder="Full Name">
+    <input id="createEmail" placeholder="Email" type="email">
+    <div class="input-wrapper">
+  <input id="createPassword" placeholder="Password" type="password">
+  <span class="toggle-pass" onclick="togglePass('createPassword', this)"></span>
+</div>
+
+    <input id="createAddress" placeholder="Address">
+    <input id="createCountry" placeholder="Country">
+    <input id="createCard" placeholder="Card Info">
+    <button onclick="createUser()">Create Account</button>
+  </div>
+</div>
+
+<div id="profileModal" class="modal" style="align-items:flex-start; justify-content:flex-end; padding-top:60px; padding-right:30px;">
+  <div class="modal-content" style="width:400px;">
+    <span class="modal-close" onclick="closeModal('profileModal')">&times;</span>
+    <div id="profileBox">👤</div>
+    <div class="profile-info">
+      <p><b>Name:</b> <span id="pName"></span></p>
+      <p><b>Email:</b> <span id="pEmail"></span></p>
+      <p><b>Address:</b> <span id="pAddress"></span></p>
+      <p><b>Country:</b> <span id="pCountry"></span></p>
+      <p><b>Card:</b> <span id="pCard"></span></p>
+    </div>
+    <button onclick="logout()">Sign out</button>
+  </div>
+</div>
+
+<div id="imageModal" class="modal">
+  <div class="modal-content">
+   <span class="modal-close">&times;</span>
+    <!-- LEVI DEO: slika + strelice + brojač -->
+    <div class="modal-left">
+      <div class="product-main-image-container">
+        <button class="side-btn" onclick="prevImage()">&lt;</button>
+        <img id="mainModalImage" class="product-main-image">
+        <button class="side-btn" onclick="nextImage()">&gt;</button>
+      </div>
+      <div class="img-counter" id="imageCounter">1 / 1</div>
+    </div>
+
+    <!-- DESNI DEO: info o proizvodu, boje, telefoni -->
+    <div class="modal-right">
+      <h3 id="modalName"></h3>
+      <p id="modalPrice"></p>
+
+      <button id="chooseColorBtn" class="choose-color-btn">Choose color</button>
+      <div id="colorOptions" style="display:none;"></div>
+      <div class="selected-info" id="selectedColor"></div>
+
+      <button id="choosePhoneBtn" class="choose-color-btn">Choose Phone Brand</button>
+      <div id="phoneBrandOptions" style="display:none;"></div>
+      <div id="phoneModels" style="display:none;"></div>
+      <div class="selected-info" id="selectedPhone"></div>
+      <div class="product-actions">
+  <button id="favModalBtn" class="action-btn">❤️</button>
+  <button id="cartModalBtn" class="action-btn">🛒</button>
+</div>
+
+      
+    </div>
+
+    <span class="modal-close" onclick="closeModal('imageModal')">&times;</span>
+  </div>
+</div>
+
+
+<script>
+
+function goToHome() {
+  
+   window.location.href = 'home.html';
+}
+
+function goToAbout() {
+  
+   window.location.href = 'aboutus.html';
+}
+
+function goToShop() {
+  window.location.href = 'shop.html';
+}
+
+function goToFavorites() {
+  
+   window.location.href = 'favorites.html';
+}
+
+function goToCart() {
+  
+  window.location.href = 'cart.html';
+}
+
+// LOGIN / CREATE / PROFILE
+const choiceBtn = document.getElementById('choiceBtn');
+choiceBtn.onclick = ()=>{ document.getElementById('choiceModal').style.display='flex'; };
+function openLogin(){ document.getElementById('choiceModal').style.display='none'; document.getElementById('loginModal').style.display='flex'; }
+function openCreate(){ document.getElementById('choiceModal').style.display='none'; document.getElementById('createModal').style.display='flex'; }
+function exploreWithoutAccount(){ document.getElementById('choiceModal').style.display='none'; alert('Exploring without account'); }
+function togglePass(id, el){
+    const input = document.getElementById(id);
+    if(input.type === 'password'){
+        input.type = 'text';
+        el.innerText = ''; // vidljivo
+    } else {
+        input.type = 'password';
+        el.innerText = ''; // skriveno (eye slash)
+    }
+}
+
+
+
+function loginUser(){ const email=document.getElementById('loginEmail').value; const password=document.getElementById('loginPassword').value; if(!email.includes('@')){alert('Enter valid email'); return;} const user={name:'User',email,password,address:'',country:'',card:''}; localStorage.setItem('user',JSON.stringify(user)); document.getElementById('loginModal').style.display='none'; showProfileIcon();}
+function createUser(){ const user={name:document.getElementById('createName').value,email:document.getElementById('createEmail').value,password:document.getElementById('createPassword').value,address:document.getElementById('createAddress').value,country:document.getElementById('createCountry').value,card:document.getElementById('createCard').value}; for(let key in user){if(!user[key]){alert('Please fill all fields');return;}} localStorage.setItem('user',JSON.stringify(user)); document.getElementById('createModal').style.display='none'; showProfileIcon();}
+function showProfileIcon(){ choiceBtn.style.display='none'; const accountDiv=document.querySelector('.account'); if(document.getElementById('meIcon')) return; const meDiv=document.createElement('div'); meDiv.id='meIcon'; meDiv.innerText='👤'; meDiv.style.cursor='pointer'; meDiv.onclick=()=>{ document.getElementById('profileModal').style.display='flex'; const user=JSON.parse(localStorage.getItem('user')); document.getElementById('pName').innerText=user.name; document.getElementById('pEmail').innerText=user.email; document.getElementById('pAddress').innerText=user.address; document.getElementById('pCountry').innerText=user.country; document.getElementById('pCard').innerText=user.card; }; accountDiv.appendChild(meDiv);}
+function logout(){ localStorage.removeItem('user'); if(document.getElementById('meIcon')) document.getElementById('meIcon').remove(); choiceBtn.style.display='inline'; closeModal('profileModal'); }
+function closeModal(id){ document.getElementById(id).style.display='none'; }
+window.onclick=function(event){ ['loginModal','createModal','profileModal','choiceModal','imageModal'].forEach(id=>{if(event.target==document.getElementById(id))document.getElementById(id).style.display='none';}); }
+
+// PRODUCTS
+const products={ 
+men: [
+{ name:"Wallet Case", img:"men/Wallet Case.png", images:["men/Wallet Case1.png","men/Wallet Case2.png","men/Wallet Case3.png"], price:12, colors:["Red","Grey","Brown","Black"] },
+{ name:"Luxury Retro Artificial Leather Phone Case", img:"men/Luxury Retro Artificial Leather Phone Case.png", images:["men/Luxury Retro Artificial Leather Phone Case1.png","men/Luxury Retro Artificial Leather Phone Case2.png","men/Luxury Retro Artificial Leather Phone Case3.png"], price:14, colors:["Brown","Black"] },
+{ name:"Luxurious skin-feeling mobile phone case", img:"men/Luxurious skin-feeling mobile phone case.png", images:["men/Luxurious skin-feeling mobile phone case1.png","men/Luxurious skin-feeling mobile phone case2.png","men/Luxurious skin-feeling mobile phone case3.png"], price:12, colors:["Red","Blue","Greeen","Black"] },
+{ name:"Luxury Mirror Flip Shell", img:"men/Luxury Mirror Flip Shell.png", images:["men/Luxury Mirror Flip Shell.png"], price:12, colors:["Black"] },
+{ name:"Heavy-Duty Shockproof Phone Case", img:"men/Heavy-Duty Shockproof Phone Case.png", images:["men/Heavy-Duty Shockproof Phone Case1.png","men/Heavy-Duty Shockproof Phone Case2.png"], price:12, colors:["Black"] },
+{ name:"Super-Slim Crystal-Clear Phone Case", img:"men/Super-Slim Crystal-Clear Phone Case.png", images:["men/Super-Slim Crystal-Clear Phone Case1.png","men/Super-Slim Crystal-Clear Phone Case2.png","men/Super-Slim Crystal-Clear Phone Case3.png"], price:10, colors:["Transparent"] },
+{ name:"Case with Slide Camera Cover Protective Case", img:"men/Case with Slide Camera Cover Protective Case.png", images:["men/Case with Slide Camera Cover Protective Case1.png","men/Case with Slide Camera Cover Protective Case2.png","men/Case with Slide Camera Cover Protective Case3.png"], price:15, colors:["Black","Blue"] },
+{ name:"Aviation Time Rotating Pattern Phone Case", img:"men/Aviation Time Rotating Pattern Phone Case.png", images:["men/Aviation Time Rotating Pattern Phone Case1.png","men/Aviation Time Rotating Pattern Phone Case2.png"], price:13, colors:["Grey"] },
+{ name:"Creative Airplane Track Sheepskin Mobile Phone Case", img:"men/Creative Airplane Track Sheepskin Mobile Phone Case.png", images:["men/Creative Airplane Track Sheepskin Mobile Phone Case1.png","men/Creative Airplane Track Sheepskin Mobile Phone Case2.png","men/Creative Airplane Track Sheepskin Mobile Phone Case3.png","men/Creative Airplane Track Sheepskin Mobile Phone Case4.png"], price:12, colors:["Blue","Green","Grey","Black"] },
+{ name:"Luxurious Shockproof Minimalist Phone Case", img:"men/Luxurious Shockproof Minimalist Phone Case.png", images:["men/Luxurious Shockproof Minimalist Phone Case1.png","men/Luxurious Shockproof Minimalist Phone Case2.png","men/Luxurious Shockproof Minimalist Phone Case3.png","men/Luxurious Shockproof Minimalist Phone Case4.png","men/Luxurious Shockproof Minimalist Phone Case5.png"], price:12, colors:["Red","Brown","Black","Grey","Blue"] }
+],
+women: [
+{ name:"Pink Flower Case", img:"women/Pink Flower Case.png", images:["women/Pink Flower Case1.png"], price:14, colors:["Gradient"] },
+{ name:"2025 High Quality Case", img:"women/2025 High Quality Case.png", images:["women/2025 High Quality Case.png"], price:15, colors:["DarkPink"] },
+{ name:"Artistict Colortul Case", img:"women/Artistict Colortul Case.png", images:["women/Artistict Colortul Case.png"], price:12, colors:["Colorful"] },
+{ name:"Colortul Heart Phone Case", img:"women/Colortul Heart Phone Case.png", images:["women/Colortul Heart Phone Case.png"], price:12, colors:["Colorful"] },
+{ name:"Cute Panda Case", img:"women/Cute Panda Case.png", images:["women/Cute Panda Case.png"], price:13, colors:["Red"] },
+{ name:"Flowers Pattern Case", img:"women/Flowers Pattern Case.png", images:["women/Flowers Pattern Case1.png","women/Flowers Pattern Case2.png"], price:14, colors:["Green","Pink"] },
+{ name:"Soft Case Pink Butterfly", img:"women/Soft Case Pink Butterfly.png", images:["women/Soft Case Pink Butterfly1.png","women/Soft Case Pink Butterfly2.png"], price:12, colors:["White","Black"] },
+{ name:"Soft Gradient Case", img:"women/Soft Gradient Case.png", images:["women/Soft Gradient Case.png"], price:11, colors:["Black"] },
+{ name:"Love Square Phone Case", img:"women/Love Square Phone Case.png", images:["women/Love Square Phone Case1.png","women/Love Square Phone Case2.png","women/Love Square Phone Case3.png","women/Love Square Phone Case4.png","women/Love Square Phone Case5.png"], price:15, colors:["Pink","White","Red","Blue","Green"] },
+{ name:"Luxury Shockproof Plating Magnetic Wireless Charge Case", img:"women/Luxury Shockproof Plating Magnetic Wireless Charge Case.png", images:["women/Luxury Shockproof Plating Magnetic Wireless Charge Case1.png","women/Luxury Shockproof Plating Magnetic Wireless Charge Case2.png","women/Luxury Shockproof Plating Magnetic Wireless Charge Case3.png"], price:18, colors:["Pink","Purple","Blue"] },
+{ name:"Rose Golden Heart", img:"women/Rose Golden Heart.png", images:["women/Rose Golden Heart.png"], price:13, colors:["Pink"] },
+{ name:"Simple Dark Black Rose Pattern", img:"women/Simple Dark Black Rose Pattern.png", images:["women/Simple Dark Black Rose Pattern.png"], price:12, colors:["Black"] },
+{ name:"Stylish And Attractive Phone Case", img:"women/Stylish And Attractive Phone Case.png", images:["women/Stylish And Attractive Phone Case1.png","women/Stylish And Attractive Phone Case2.png"], price:14, colors:["Blue","Pink"] }
+],
+screenProtectors: [
+  { 
+    name: "Definition Screen Protectors Made of Tempered Glass", 
+    img: "screenProtectors/Definition Screen Protectors Made of Tempered Glass.png", 
+    images: [
+      "screenProtectors/Definition Screen Protectors Made of Tempered Glass1.png",
+      "screenProtectors/Definition Screen Protectors Made of Tempered Glass2.png"
+    ], 
+    price: 8, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "Two Pieces of (Screen Anti-Peep) Privacy Tempered Glass", 
+    img: "screenProtectors/Two Pieces of (Screen Anti-Peep) Privacy Tempered Glass.png", 
+    images: [
+      "screenProtectors/Two Pieces of (Screen Anti-Peep) Privacy Tempered Glass1.png"
+    ], 
+    price: 12, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "Anti-Spy Protection Full Coverage Screen Protector", 
+    img: "screenProtectors/Anti-Spy Protection Full Coverage Screen Protector.png", 
+    images: [
+      "screenProtectors/Anti-Spy Protection Full Coverage Screen Protector1.png"
+    ], 
+    price: 10, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "5 Pack HD Hydrogel Film for Samsung Galaxy", 
+    img: "screenProtectors/5 Pack HD Hydrogel Film for Samsung Galaxy.png", 
+    images: [
+      "screenProtectors/5 Pack HD Hydrogel Film for Samsung Galaxy.png"
+    ], 
+    price: 15, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "3pcs Matte Privacy Ceramic Protective Film", 
+    img: "screenProtectors/3pcs Matte Privacy Ceramic Protective Film.png", 
+    images: [
+      "screenProtectors/3pcs Matte Privacy Ceramic Protective Film1.png"
+    ], 
+    price: 11, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "Premium Hydrogel Screen Protector for Smartwatches", 
+    img: "screenProtectors/Premium Hydrogel Screen Protector for Smartwatches.png", 
+    images: [
+      "screenProtectors/Premium Hydrogel Screen Protector for Smartwatches.png"
+    ], 
+    price: 9, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "Premium Tempered Glass Screen Protector for Samsung", 
+    img: "screenProtectors/Premium Tempered Glass Screen Protector for Samsung.png", 
+    images: [
+      "screenProtectors/Premium Tempered Glass Screen Protector for Samsung1.png"
+    ], 
+    price: 13, 
+    colors: ["Transparent"] 
+  },
+  { 
+    name: "Anti scratch protector", 
+    img: "screenProtectors/Anti scratch protector.png", 
+    images: [
+      "screenProtectors/Anti scratch protector.png"
+    ], 
+    price: 7, 
+    colors: ["Transparent"] 
+  }
+],
+
+headphones: [
+  {
+    name: "LAN XUN Wireless Headphones",
+    img: "headphones/LAN XUN Wireless Headphones.png",
+    images: [
+      "headphones/LAN XUN Wireless Headphones1.png",
+      "headphones/LAN XUN Wireless Headphones2.png",
+      "headphones/LAN XUN Wireless Headphones3.png"
+    ],
+    price: 25,
+    colors: ["Purple", "White", "Black"]
+  },
+  {
+    name: "Upgraded High-Quality Wireless Headphones",
+    img: "headphones/Upgraded High-Quality Wireless Headphones.png",
+    images: [
+      "headphones/Upgraded High-Quality Wireless Headphones1.png",
+      "headphones/Upgraded High-Quality Wireless Headphones2.png"
+    ],
+    price: 30,
+    colors: ["White", "Black"]
+  },
+  {
+    name: "Upgraded wireless headphones",
+    img: "headphones/Upgraded wireless headphones.png",
+    images: [
+      "headphones/Upgraded wireless headphones.png"
+    ],
+    price: 20,
+    colors: ["Light Blue"]
+  },
+  {
+    name: "Ear True Wireless Earbuds with Long-Lasting Battery",
+    img: "headphones/Ear True Wireless Earbuds with Long-Lasting Battery.png",
+    images: [
+      "headphones/Ear True Wireless Earbuds with Long-Lasting Battery1.png",
+      "headphones/Ear True Wireless Earbuds with Long-Lasting Battery2.png"
+    ],
+    price: 22,
+    colors: ["White", "Black"]
+  },
+  {
+    name: "WoSD 2025 New TWS Wireless Headset Earbuds- Unrivalled true wireless",
+    img: "headphones/WoSD 2025 New TWS Wireless Headset Earbuds- Unrivalled true wireless.png",
+    images: [
+      "headphones/WoSD 2025 New TWS Wireless Headset Earbuds- Unrivalled true wireless1.png",
+      "headphones/WoSD 2025 New TWS Wireless Headset Earbuds- Unrivalled true wireless2.png"
+    ],
+    price: 28,
+    colors: ["White"]
+  },
+  {
+    name: "True wireless headphones",
+    img: "headphones/True wireless headphones.png",
+    images: [
+      "headphones/True wireless headphones.png"
+    ],
+    price: 18,
+    colors: ["Black"]
+  },
+  {
+    name: "Lenovo GM2 pro intelligent noise",
+    img: "headphones/Lenovo GM2 pro intelligent noise.png",
+    images: [
+      "headphones/Lenovo GM2 pro intelligent noise1.png",
+      "headphones/Lenovo GM2 pro intelligent noise2.png"
+    ],
+    price: 35,
+    colors: ["Black", "White"]
+  },
+  {
+    name: "ASUS wireless Over-Ear",
+    img: "headphones/ASUS wireless Over-Ear.png",
+    images: [
+      "headphones/ASUS wireless Over-Ear.png"
+    ],
+    price: 40,
+    colors: ["Black"]
+  },
+  {
+    name: "Wireless Gaming Headset",
+    img: "headphones/Wireless Gaming Headset.png",
+    images: [
+      "headphones/Wireless Gaming Headset.png"
+    ],
+    price: 38,
+    colors: ["Green"]
+  },
+  {
+    name: "Acers new 2025",
+    img: "headphones/Acers new 2025.png",
+    images: [
+      "headphones/Acers new 2025.png"
+    ],
+    price: 32,
+    colors: ["Gold"]
+  }
+],
+
+masksForHeadphones: [
+  {
+    name: "Airpods case",
+    img: "masksForHeadphones/Airpods case.png",
+    images: [
+      "masksForHeadphones/Airpods case.png"
+    ],
+    price: 12,
+    colors: ["Black"]
+  },
+  {
+    name: "Battery level 1% pattern Shockproof",
+    img: "masksForHeadphones/Battery level 1% pattern Shockproof.png",
+    images: [
+      "masksForHeadphones/Battery level 1% pattern Shockproof.png"
+    ],
+    price: 10,
+    colors: ["Black"]
+  },
+  {
+    name: "Kekoa for AirPods Pro 2nd Generation Case",
+    img: "masksForHeadphones/Kekoa for AirPods Pro 2nd Generation Case.png",
+    images: [
+      "masksForHeadphones/Kekoa for AirPods Pro 2nd Generation Case1.png"
+    ],
+    price: 15,
+    colors: ["Green", "Blue"]
+  },
+  {
+    name: "Suitable for Airpods pro",
+    img: "masksForHeadphones/Suitable for Airpods pro.png",
+    images: [
+      "masksForHeadphones/Suitable for Airpods pro1.png",
+      "masksForHeadphones/Suitable for Airpods pro2.png",
+      "masksForHeadphones/Suitable for Airpods pro3.png",
+      "masksForHeadphones/Suitable for Airpods pro4.png"
+    ],
+    price: 18,
+    colors: ["Orange", "Pink", "Black", "White"]
+  },
+  {
+    name: "Multifunctional waist",
+    img: "masksForHeadphones/Multifunctional waist.png",
+    images: [
+      "masksForHeadphones/Multifunctional waist.png"
+    ],
+    price: 11,
+    colors: ["Black"]
+  },
+  {
+    name: "Portable Faux",
+    img: "masksForHeadphones/Portable Faux.png",
+    images: [
+      "masksForHeadphones/Portable Faux.png"
+    ],
+    price: 12,
+    colors: ["Black"]
+  }
+],
+
+
+Phoneholders: [
+  {
+    name: "2-Stage Adjustable Aluminum Phone Stand with 360° Rotation & Foldable Design",
+    img: "Phone holders/2-Stage Adjustable Aluminum Phone Stand with 360° Rotation & Foldable Design.png",
+    images: [
+      "Phone holders/2-Stage Adjustable Aluminum Phone Stand with 360° Rotation & Foldable Design1.png",
+      "Phone holders/2-Stage Adjustable Aluminum Phone Stand with 360° Rotation & Foldable Design2.png"
+    ],
+    price: 14,
+    colors: ["Black", "White"]
+  },
+  {
+    name: "TOPK Car Dashboard Phone Holder",
+    img: "Phone holders/TOPK Car Dashboard Phone Holder.png",
+    images: [
+      "Phone holders/TOPK Car Dashboard Phone Holder1.png",
+      "Phone holders/TOPK Car Dashboard Phone Holder2.png"
+    ],
+    price: 12,
+    colors: ["Black"]
+  },
+  {
+    name: "360-Degree Rotatable Dashboard Mount with 270-Degree Swivel Head, Soft PVC Car Phone Holder",
+    img: "Phone holders/360-Degree Rotatable Dashboard Mount with 270-Degree Swivel Head, Soft PVC Car Phone Holder.png",
+    images: [
+      "Phone holders/360-Degree Rotatable Dashboard Mount with 270-Degree Swivel Head, Soft PVC Car Phone Holder1.png",
+      "Phone holders/360-Degree Rotatable Dashboard Mount with 270-Degree Swivel Head, Soft PVC Car Phone Holder2.png"
+    ],
+    price: 13,
+    colors: ["Black"]
+  },
+  {
+    name: "Sucker Car Phone Holder Mount Stand",
+    img: "Phone holders/Sucker Car Phone Holder Mount Stand.png",
+    images: [
+      "Phone holders/Sucker Car Phone Holder Mount Stand.png"
+    ],
+    price: 10,
+    colors: ["Black"]
+  },
+  {
+    name: "A Popular Car Phone Holder with a Suction Cup",
+    img: "Phone holders/A Popular Car Phone Holder with a Suction Cup.png",
+    images: [
+      "Phone holders/A Popular Car Phone Holder with a Suction Cup1.png"
+    ],
+    price: 11,
+    colors: ["Black"]
+  },
+  {
+    name: "Phone Holder with 360° Rotating",
+    img: "Phone holders/Phone Holder with 360° Rotating.png",
+    images: [
+      "Phone holders/Phone Holder with 360° Rotating1.png",
+      "Phone holders/Phone Holder with 360° Rotating2.png"
+    ],
+    price: 15,
+    colors: ["Black", "White", "Blue"]
+  },
+  {
+    name: "Car Phone Holder Mount",
+    img: "Phone holders/Car Phone Holder Mount.png",
+    images: [
+      "Phone holders/Car Phone Holder Mount1.png"
+    ],
+    price: 12,
+    colors: ["Black"]
+  }
+]
+
+
+};
+const phoneCatalog = {
+  "iPhone": ["iPhone 11","iPhone 12","iPhone 12 Pro","iPhone 13","iPhone 13 Pro","iPhone 14","iPhone 14 Pro","iPhone 15","iPhone 15 Pro","iPhone SE"],
+  "Samsung": ["Galaxy S20","S21","S22","S23","S24","A51","A52","A53","A54","Note 20"],
+  "Xiaomi": ["Redmi 9","Redmi 10","Redmi Note 10","Note 11","Note 12","Mi 10","Mi 11","12","13","Poco X3"],
+  "Huawei": ["P30","P40","P50","Mate 20","Mate 30","Mate 40","Nova 9","Nova 10","Y6","Y9"],
+  "Google": ["Pixel 4","Pixel 5","Pixel 6","Pixel 6 Pro","Pixel 7","Pixel 7 Pro","Pixel 8","Pixel 8 Pro","Pixel Fold","Pixel A"]
+};
+
+// --------------------- GLOBAL ---------------------
+let currentCategory = 'all';
+let currentSort = '';
+let currentProduct = null;
+let imagesInModal = [];
+let currentImageIndex = 0;
+
+let selectedColorValue = null;
+let selectedPhoneValue = null;
+
+let selectedCurrency = 'EUR';
+const currencyRates = { 'EUR': 1, 'USD': 1.1, 'BGN': 1.95 };
+const currencySymbols = { 'EUR': '€', 'USD': '$', 'BGN': 'лв' };
+
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// --------------------- HELPER ---------------------
+function formatPrice(price) {
+  const rate = currencyRates[selectedCurrency] || 1;
+  const symbol = currencySymbols[selectedCurrency] || '';
+  return `${symbol}${(price * rate).toFixed(2)}`;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function showToast(text) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerText = text;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 50);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2000);
+}
+
+function isInFavorites(product) { return favorites.some(f => f.name === product.name); }
+function isInCart(product) { return cart.some(c => c.name === product.name); }
+
+// --------------------- CURRENCY ---------------------
+function changeCurrency(newCurrency) {
+  selectedCurrency = newCurrency;
+  document.querySelectorAll('.product-card').forEach(card => {
+    const name = card.querySelector('.product-name').innerText;
+    const product = Object.values(products).flat().find(p => p.name === name);
+    if (product) card.querySelector('.product-price').innerText = formatPrice(product.price);
+  });
+  if (currentProduct) document.getElementById('modalPrice').innerText = formatPrice(currentProduct.price);
+}
+
+document.getElementById('currencySelector').addEventListener('change', (e) => {
+  changeCurrency(e.target.value);
+});
+
+// --------------------- CATEGORY & SORT ---------------------
+function showCategory(category = null, sort = null) {
+  // Toggle category
+  if (category) {
+    currentCategory = (category === currentCategory) ? 'all' : category;
+  }
+  // Toggle sort
+  if (sort) {
+    currentSort = (sort === currentSort) ? '' : sort;
+  }
+
+  const container = document.getElementById('productContainer');
+  container.innerHTML = '';
+
+  // Reset active classes
+  document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+
+  document.querySelectorAll('.sidebar li[data-category]').forEach(li => {
+    if (li.dataset.category === currentCategory) li.classList.add('active');
+  });
+
+  document.querySelectorAll('.sidebar li[data-sort]').forEach(li => {
+    if (li.dataset.sort === currentSort) li.classList.add('active');
+  });
+
+  // Get products
+  let arr = (currentCategory === 'all') ? Object.values(products).flat() : products[currentCategory] || [];
+
+  // Sort if needed
+  if (currentSort === 'asc') arr.sort((a, b) => a.price - b.price);
+  else if (currentSort === 'desc') arr.sort((a, b) => b.price - a.price);
+
+  // Create cards
+  arr.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    const img = document.createElement('img');
+    img.src = p.img;
+    img.alt = p.name;
+    img.onclick = () => openImageModal(p);
+
+    const name = document.createElement('div');
+    name.className = 'product-name';
+    name.innerText = p.name;
+
+    const price = document.createElement('div');
+    price.className = 'product-price';
+    price.innerText = formatPrice(p.price);
+
+    const actions = document.createElement('div');
+    actions.className = 'product-actions';
+
+    const favBtn = document.createElement('button');
+    favBtn.className = 'action-btn';
+    favBtn.innerText = '❤️';
+    favBtn.classList.toggle('active', isInFavorites(p));
+    favBtn.onclick = () => {
+      toggleFavorite(p);
+      favBtn.classList.toggle('active', isInFavorites(p));
+    };
+
+    const cartBtn = document.createElement('button');
+    cartBtn.className = 'action-btn';
+    cartBtn.innerText = isInCart(p) ? 'REMOVE' : '🛒';
+    cartBtn.classList.toggle('active', isInCart(p));
+    cartBtn.onclick = () => handleCartClick(p, cartBtn, null);
+
+    actions.appendChild(favBtn);
+    actions.appendChild(cartBtn);
+
+    card.appendChild(img);
+    card.appendChild(name);
+    card.appendChild(price);
+    card.appendChild(actions);
+
+    container.appendChild(card);
+  });
+}
+
+// --------------------- CART ---------------------
+
+function updateCartCount() {
+    const badge = document.getElementById('cart-count-badge');
+    badge.textContent = cart.length;
+}
+
+
+// Dodavanje u cart
+function handleCartClick(product, cardBtn, modalBtn) {
+  if (!selectedColorValue || !selectedPhoneValue) {
+    openImageModal(product);
+    showToast('Please choose color and phone model first');
+    return;
+  }
+
+  if (isInCart(product)) {
+    cart = cart.filter(c => c.name !== product.name);
+    showToast('Removed from cart 🛒');
+  } else {
+    cart.push({ ...product, color: selectedColorValue, phone: selectedPhoneValue });
+    showToast('Added to cart 🛒');
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+
+  // Ažuriraj dugmad i broj u headeru
+  if (cardBtn) cardBtn.innerText = isInCart(product) ? 'REMOVE' : '🛒';
+  if (cardBtn) cardBtn.classList.toggle('active', isInCart(product));
+  if (modalBtn) modalBtn.classList.toggle('active', isInCart(product));
+
+  updateCartCount(); // <--- automatski update
+}
+
+// Kada se stranica učita, inicijalizuj broj
+window.addEventListener('load', () => {
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCartCount();
+});
+
+
+// --------------------- FAVORITES ---------------------
+function toggleFavorite(product) {
+  if (isInFavorites(product)) {
+    favorites = favorites.filter(f => f.name !== product.name);
+    showToast('Removed from favorites ❤️');
+  } else {
+    favorites.push(product);
+    showToast('Added to favorites ❤️');
+  }
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+  updateFavoritesCountBadge();
+}
+
+
+
+// --------------------- MODAL ---------------------
+function loadValidImages(imagePaths, callback) {
+  const validImages = [];
+  let loaded = 0;
+  if (!imagePaths.length) { callback([]); return; }
+
+  imagePaths.forEach(src => {
+    const img = new Image();
+    img.onload = () => { validImages.push(src); loaded++; if (loaded === imagePaths.length) callback(validImages); };
+    img.onerror = () => { loaded++; if (loaded === imagePaths.length) callback(validImages); };
+    img.src = src;
+  });
+}
+
+function openImageModal(product) {
+  currentProduct = product;
+
+  // Reset izbora boja i modela
+  selectedColorValue = null;
+  selectedPhoneValue = null;
+  document.getElementById('selectedColor').innerText = '';
+  document.getElementById('selectedPhone').innerText = '';
+
+  // Kombinujemo slike
+  let combined = [];
+  if (product.img) combined.push(product.img);
+  if (Array.isArray(product.images)) {
+    product.images.forEach(img => { if (!combined.includes(img)) combined.push(img); });
+  }
+
+  loadValidImages(combined, valid => {
+    imagesInModal = valid;
+    currentImageIndex = 0;
+    if (imagesInModal.length === 0) return;
+
+    updateModalContent();
+    document.getElementById('imageModal').style.display = 'flex';
+    document.getElementById('modalPrice').innerText = formatPrice(product.price);
+
+    const favModal = document.getElementById('favModalBtn');
+    const cartModal = document.getElementById('cartModalBtn');
+
+    // ❤️ FAVORITES - logika ostaje
+    favModal.classList.toggle('active', isInFavorites(product));
+    favModal.onclick = () => {
+      toggleFavorite(product);
+      favModal.classList.toggle('active', isInFavorites(product));
+      showCategory(currentCategory, currentSort);
+    };
+
+    // 🛒 CART MODAL
+    cartModal.classList.toggle('active', isInCart(product));
+    cartModal.onclick = () => {
+      // Pronađi dugme u kartici za trenutni proizvod
+      const cardBtn = Array.from(document.querySelectorAll('.product-card'))
+        .find(c => c.querySelector('.product-name').innerText === currentProduct.name)
+        ?.querySelector('.action-btn:nth-child(2)'); // drugo dugme = Cart
+
+      handleCartClick(currentProduct, cardBtn, cartModal);
+    };
+  });
+}
+
+function updateModalContent() {
+  if (!currentProduct || !imagesInModal.length) return;
+  document.getElementById('mainModalImage').src = imagesInModal[currentImageIndex];
+  document.getElementById('modalName').innerText = currentProduct.name;
+  document.getElementById('modalPrice').innerText = formatPrice(currentProduct.price);
+  document.getElementById('imageCounter').innerText = `${currentImageIndex + 1} / ${imagesInModal.length}`;
+
+  // COLORS
+  const colorDiv = document.getElementById('colorOptions');
+  colorDiv.innerHTML = '';
+  colorDiv.style.display = 'none';
+  document.getElementById('chooseColorBtn').onclick = () => {
+    colorDiv.style.display = (colorDiv.style.display === 'flex') ? 'none' : 'flex';
+  };
+  (currentProduct.colors || []).forEach(color => {
+    const dot = document.createElement('div');
+    dot.className = 'color-dot';
+    dot.style.background = color.toLowerCase();
+    dot.title = color;
+    dot.onclick = () => {
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      selectedColorValue = color;
+      document.getElementById('selectedColor').innerText = `Selected color: ${color}`;
+      colorDiv.style.display = 'none';
+    };
+    colorDiv.appendChild(dot);
+  });
+
+  // PHONE BRANDS
+  const brandDiv = document.getElementById('phoneBrandOptions');
+  const modelsDiv = document.getElementById('phoneModels');
+  brandDiv.innerHTML = '';
+  modelsDiv.innerHTML = '';
+  brandDiv.style.display = 'none';
+  modelsDiv.style.display = 'none';
+
+  document.getElementById('choosePhoneBtn').onclick = () => {
+    brandDiv.style.display = (brandDiv.style.display === 'flex') ? 'none' : 'flex';
+    modelsDiv.style.display = 'none';
+    brandDiv.innerHTML = '';
+    modelsDiv.innerHTML = '';
+
+    Object.keys(phoneCatalog).forEach(brand => {
+      const brandBtn = document.createElement('div');
+      brandBtn.className = 'phone-model';
+      brandBtn.innerText = brand;
+      brandBtn.onclick = () => {
+        brandDiv.style.display = 'none';
+        modelsDiv.style.display = 'flex';
+        modelsDiv.innerHTML = '';
+        phoneCatalog[brand].forEach(model => {
+          const modelBtn = document.createElement('div');
+          modelBtn.className = 'phone-model';
+          modelBtn.innerText = model;
+          modelBtn.onclick = () => {
+            document.querySelectorAll('#phoneModels .phone-model').forEach(m => m.classList.remove('active'));
+            modelBtn.classList.add('active');
+            selectedPhoneValue = `${brand} ${model}`;
+            document.getElementById('selectedPhone').innerText = `Selected phone: ${selectedPhoneValue}`;
+            modelsDiv.style.display = 'none';
+          };
+          modelsDiv.appendChild(modelBtn);
+        });
+      };
+      brandDiv.appendChild(brandBtn);
+    });
+  };
+}
+
+function nextImage() {
+  if (!imagesInModal.length) return;
+  currentImageIndex = (currentImageIndex + 1) % imagesInModal.length;
+  updateModalContent();
+}
+
+function prevImage() {
+  if (!imagesInModal.length) return;
+  currentImageIndex = (currentImageIndex + imagesInModal.length - 1) % imagesInModal.length;
+  updateModalContent();
+}
+
+// --------------------- INIT ---------------------
+window.addEventListener('load', () => {
+  showCategory('all');
+  updateCartHeader(); // inicijalno postavi broj u headeru
+
+  if (localStorage.getItem('user')) showProfileIcon();
+});
+
+function updateCartHeader() {
+    const cartCount = document.getElementById('cart-count');
+    cartCount.textContent = cart.length; // koristi local cart array
+}
+
+
+function updateFavoritesCountBadge() {
+    const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    document.getElementById('favorites-count').innerText = favs.length;
+}
+
+// Run badges update on page load
+window.addEventListener('load', ()=>{
+    
+    updateFavoritesCountBadge();
+});
+
+function addToCart(product){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCountBadge();
+    showToast('Added to cart 🛒');
+}
+
+function removeFromCart(product){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(p => p.name !== product.name);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCountBadge();
+    showToast('Removed from cart 🛒');
+}
+
+function addToFavorites(product){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    favs.push(product);
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    updateFavoritesCountBadge();
+    showToast('Added to favorites ❤️');
+}
+
+function removeFromFavorites(product){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    favs = favs.filter(p => p.name !== product.name);
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    updateFavoritesCountBadge();
+    showToast('Removed from favorites ❤️');
+}
+
+// ==================== AUTO UPDATE ACROSS TABS ====================
+// Ako korisnik otvori više taba, brojač se menja odmah
+window.addEventListener('storage', (e) => {
+    if(e.key === 'cart') updateCartCountBadge();
+    if(e.key === 'favorites') updateFavoritesCountBadge();
+});
+
+// ==================== TOAST ====================
+function showToast(msg){
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerText = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.classList.add('show'), 50);
+    setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 300);
+    }, 2000);
+}
+</script>
+
+</body>
+</html>

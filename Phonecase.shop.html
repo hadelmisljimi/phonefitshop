@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoneShop</title>
+<style>
+/* BODY */
+body {
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#121212;
+    color:#e0e0e0;
+    display:flex;
+    min-height:100vh;
+}
+
+/* HEADER */
+header {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:50px;
+    background:#1f1f1f;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid #333;
+    z-index:1000;
+}
+header a{
+    color:#e0e0e0;
+    text-decoration:none;
+    font-weight:600;
+    padding:5px 10px;
+    border-radius:6px;
+}
+header a:hover{color:#ffcc00;}
+
+/* SIDEBAR */
+#sidebar{
+    width:180px;
+    padding:70px 10px 10px 10px; /* offset zbog header */
+    background:#1b1b1b;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+#sidebar input{
+    padding:5px;
+    border-radius:5px;
+    border:none;
+    margin-bottom:10px;
+    background:#2b2b2b;
+    color:#fff;
+}
+#sidebar div{
+    padding:8px 6px;
+    cursor:pointer;
+    border-radius:6px;
+}
+#sidebar div:hover{
+    background:#ffcc00;
+    color:#000;
+}
+
+/* MAIN GRID */
+#main{
+    flex:1;
+    padding:70px 20px 20px 20px; /* offset zbog header */
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap:20px;
+}
+
+/* PRODUCT CARD */
+.product{
+    background:#1e1e1e;
+    border-radius:12px;
+    padding:10px;
+    text-align:center;
+    position:relative;
+    box-shadow:0 4px 10px rgba(0,0,0,0.5);
+}
+.product img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:8px;
+    cursor:pointer;
+}
+.product h3{
+    font-size:16px;
+    min-height:48px;
+}
+.product p{
+    font-weight:600;
+    min-height:20px;
+    margin:5px 0;
+}
+.btn{
+    padding:6px 10px;
+    background:#ffcc00;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+}
+.btn:hover{background:#ffd633;}
+.favorite-btn{
+    cursor:pointer;
+    border-radius:6px;
+    padding:6px 10px;
+    background:#555;
+    color:#fff;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+.modal-content{
+    background:#1e1e1e;
+    color:#e0e0e0;
+    width:90%;
+    max-width:450px;
+    padding:15px;
+    border-radius:10px;
+    max-height:90%;
+    overflow-y:auto;
+    position:relative;
+}
+.modal-close{
+    position:absolute;
+    top:8px;
+    right:8px;
+    cursor:pointer;
+    font-weight:bold;
+    color:#ffcc00;
+}
+.arrow-btn{
+    cursor:pointer;
+    font-weight:bold;
+    color:#ffcc00;
+    padding:5px 10px;
+    user-select:none;
+}
+.img-counter{
+    text-align:center;
+    margin:5px 0;
+    color:#ccc;
+    font-size:14px;
+}
+.color-option{
+    display:inline-block;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    margin:0 5px;
+    cursor:pointer;
+    border:2px solid #555;
+    transition:0.2s;
+}
+.color-option.selected{
+    border:2px solid #ffcc00;
+    transform:scale(1.2);
+}
+
+/* FOOTER */
+footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:linear-gradient(135deg,#0e0e0e,#1b1b1b);
+    display:flex;
+    justify-content:center;
+    padding:6px 0;
+    gap:15px;
+}
+footer a{
+    color:#e8e8e8;
+    text-decoration:none;
+    font-weight:600;
+    padding:5px 10px;
+    border-radius:8px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+}
+footer a:hover{color:#ffcc00; border-color:#ffcc00;}
+.cart-count, .fav-count{
+    position:relative;
+    top:-6px;
+    right:-6px;
+    background:#ffcc00;
+    color:#000;
+    font-size:12px;
+    font-weight:700;
+    padding:2px 6px;
+    border-radius:50%;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <a href="home.html">🏠 Home</a>
+    <a href="about.html">ℹ️ About Us</a>
+    <a href="favorites.html">❤️ Favorites <span class="fav-count">0</span></a>
+    <a href="cart.html">🛒 Cart <span class="cart-count">0</span></a>
+</header>
+
+<div id="sidebar">
+    <input type="text" placeholder="Search..." id="searchInput">
+    <div onclick="loadCategory('all')">All</div>
+    <div onclick="loadCategory('men')">Men</div>
+    <div onclick="loadCategory('women')">Women</div>
+    <div onclick="loadCategory('screenProtectors')">Screen Protectors</div>
+    <div onclick="loadCategory('phoneHolders')">Phone Holders</div>
+    <div onclick="loadCategory('headphones')">Headphones</div>
+    <div onclick="loadCategory('headphoneMasks')">Headphone Masks</div>
+</div>
+
+<div id="main"></div>
+
+<div id="favPopup" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+background:#222;color:#fff;padding:15px 25px;border-radius:10px;font-size:18px;display:none;opacity:0;z-index:99999;">Added to favorites ❤️</div>
+
+<div id="productPopup" class="modal" onclick="outsideClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeProductPopup()">X</span>
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+            <span class="arrow-btn" onclick="prevImg()">❮</span>
+            <div>
+                <img id="popupMainImg" src="" style="width:300px; max-height:300px; object-fit:contain; border-radius:8px;">
+                <div id="imgCounter" class="img-counter"></div>
+            </div>
+            <span class="arrow-btn" onclick="nextImg()">❯</span>
+        </div>
+        <h3 id="popupName"></h3>
+        <p id="popupPrice"></p>
+        <div id="colorOptions" style="margin-bottom:10px;">Colors: </div>
+        <label>Choose Size:</label>
+        <select id="popupSize">
+            <option value="">Select size</option>
+            <option>Small</option>
+            <option>Medium</option>
+            <option>Large</option>
+        </select>
+        <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+            <button class="btn" onclick="addPopupToCart()">🛒 Add to Cart</button>
+            <span id="popupFavorite" class="favorite-btn">♡</span>
+        </div>
+    </div>
+</div>
+
+<script>
+const products = {
+men: [
+{ name:"Wallet Case", img:"men/Wallet Case.png", images:["men/Wallet Case1.png","men/Wallet Case2.png","men/Wallet Case3.png"], price:12, colors:["Red","Grey","Brown","Black"] },
+{ name:"Luxury Retro Artificial Leather Phone Case", img:"men/Luxury Retro Artificial Leather Phone Case.png", images:["men/Luxury Retro Artificial Leather Phone Case1.png","men/Luxury Retro Artificial Leather Phone Case2.png","men/Luxury Retro Artificial Leather Phone Case3.png"], price:14, colors:["Brown","Black"] },
+{ name:"Luxurious skin-feeling mobile phone case", img:"men/Luxurious skin-feeling mobile phone case.png", images:["men/Luxurious skin-feeling mobile phone case1.png","men/Luxurious skin-feeling mobile phone case2.png","men/Luxurious skin-feeling mobile phone case3.png"], price:12, colors:["Red","Blue","Greeen","Black"] },
+{ name:"Luxury Mirror Flip Shell", img:"men/Luxury Mirror Flip Shell.png", images:["men/Luxury Mirror Flip Shell.png"], price:12, colors:["Black"] },
+{ name:"Heavy-Duty Shockproof Phone Case", img:"men/Heavy-Duty Shockproof Phone Case.png", images:["men/Heavy-Duty Shockproof Phone Case1.png","men/Heavy-Duty Shockproof Phone Case2.png"], price:12, colors:["Black"] },
+{ name:"Super-Slim Crystal-Clear Phone Case", img:"men/Super-Slim Crystal-Clear Phone Case.png", images:["men/Super-Slim Crystal-Clear Phone Case1.png","men/Super-Slim Crystal-Clear Phone Case2.png","men/Super-Slim Crystal-Clear Phone Case3.png"], price:10, colors:["Transparent"] },
+{ name:"Case with Slide Camera Cover Protective Case", img:"men/Case with Slide Camera Cover Protective Case.png", images:["men/Case with Slide Camera Cover Protective Case1.png","men/Case with Slide Camera Cover Protective Case2.png","men/Case with Slide Camera Cover Protective Case3.png"], price:15, colors:["Black","Blue"] },
+{ name:"Aviation Time Rotating Pattern Phone Case", img:"men/Aviation Time Rotating Pattern Phone Case.png", images:["men/Aviation Time Rotating Pattern Phone Case1.png","men/Aviation Time Rotating Pattern Phone Case2.png"], price:13, colors:["Grey"] },
+{ name:"Creative Airplane Track Sheepskin Mobile Phone Case", img:"men/Creative Airplane Track Sheepskin Mobile Phone Case.png", images:["men/Creative Airplane Track Sheepskin Mobile Phone Case1.png","men/Creative Airplane Track Sheepskin Mobile Phone Case2.png","men/Creative Airplane Track Sheepskin Mobile Phone Case3.png","men/Creative Airplane Track Sheepskin Mobile Phone Case4.png"], price:12, colors:["Blue","Green","Grey","Black"] },
+{ name:"Luxurious Shockproof Minimalist Phone Case", img:"men/Luxurious Shockproof Minimalist Phone Case.png", images:["men/Luxurious Shockproof Minimalist Phone Case1.png","men/Luxurious Shockproof Minimalist Phone Case2.png","men/Luxurious Shockproof Minimalist Phone Case3.png","men/Luxurious Shockproof Minimalist Phone Case4.png","men/Luxurious Shockproof Minimalist Phone Case5.png"], price:12, colors:["Red","Brown","Black","Grey","Blue"] }
+],
+women: [
+{ name:"Pink Flower Case", img:"women/Pink Flower Case.png", images:["women/Pink Flower Case1.png"], price:14, colors:["Gradient"] },
+{ name:"2025 High Quality Case", img:"women/2025 High Quality Case.png", images:["women/2025 High Quality Case.png"], price:15, colors:["DarkPink"] },
+{ name:"Artistict Colortul Case", img:"women/Artistict Colortul Case.png", images:["women/Artistict Colortul Case.png"], price:12, colors:["Colorful"] },
+{ name:"Colortul Heart Phone Case", img:"women/Colortul Heart Phone Case.png", images:["women/Colortul Heart Phone Case.png"], price:12, colors:["Colorful"] },
+{ name:"Cute Panda Case", img:"women/Cute Panda Case.png", images:["women/Cute Panda Case.png"], price:13, colors:["Red"] },
+{ name:"Flowers Pattern Case", img:"women/Flowers Pattern Case.png", images:["women/Flowers Pattern Case1.png","women/Flowers Pattern Case2.png"], price:14, colors:["Green","Pink"] },
+{ name:"Soft Case Pink Butterfly", img:"women/Soft Case Pink Butterfly.png", images:["women/Soft Case Pink Butterfly1.png","women/Soft Case Pink Butterfly2.png"], price:12, colors:["White","Black"] },
+{ name:"Soft Gradient Case", img:"women/Soft Gradient Case.png", images:["women/Soft Gradient Case.png"], price:11, colors:["Black"] },
+{ name:"Love Square Phone Case", img:"women/Love Square Phone Case.png", images:["women/Love Square Phone Case1.png","women/Love Square Phone Case2.png","women/Love Square Phone Case3.png","women/Love Square Phone Case4.png","women/Love Square Phone Case5.png"], price:15, colors:["Pink","White","Red","Blue","Green"] },
+{ name:"Luxury Shockproof Plating Magnetic Wireless Charge Case", img:"women/Luxury Shockproof Plating Magnetic Wireless Charge Case.png", images:["women/Luxury Shockproof Plating Magnetic Wireless Charge Case1.png","women/Luxury Shockproof Plating Magnetic Wireless Charge Case2.png","women/Luxury Shockproof Plating Magnetic Wireless Charge Case3.png"], price:18, colors:["Pink","Purple","Blue"] },
+{ name:"Rose Golden Heart", img:"women/Rose Golden Heart.png", images:["women/Rose Golden Heart.png"], price:13, colors:["Pink"] },
+{ name:"Simple Dark Black Rose Pattern", img:"women/Simple Dark Black Rose Pattern.png", images:["women/Simple Dark Black Rose Pattern.png"], price:12, colors:["Black"] },
+{ name:"Stylish And Attractive Phone Case", img:"women/Stylish And Attractive Phone Case.png", images:["women/Stylish And Attractive Phone Case1.png","women/Stylish And Attractive Phone Case2.png"], price:14, colors:["Blue","Pink"] }
+],
+const phoneCatalog = {
+  "iPhone": ["iPhone 11","iPhone 12","iPhone 12 Pro","iPhone 13","iPhone 13 Pro","iPhone 14","iPhone 14 Pro","iPhone 15","iPhone 15 Pro","iPhone SE"],
+  "Samsung": ["Galaxy S20","S21","S22","S23","S24","A51","A52","A53","A54","Note 20"],
+  "Xiaomi": ["Redmi 9","Redmi 10","Redmi Note 10","Note 11","Note 12","Mi 10","Mi 11","12","13","Poco X3"],
+  "Huawei": ["P30","P40","P50","Mate 20","Mate 30","Mate 40","Nova 9","Nova 10","Y6","Y9"],
+  "Google": ["Pixel 4","Pixel 5","Pixel 6","Pixel 6 Pro","Pixel 7","Pixel 7 Pro","Pixel 8","Pixel 8 Pro","Pixel Fold","Pixel A"]
+};
+};
+
+// ===== GLOBAL =====
+let cart=JSON.parse(localStorage.getItem('cart'))||[];
+let favorites=JSON.parse(localStorage.getItem('favorites'))||[];
+let currentPopupProduct=null;
+let popupImgIndex=0;
+let selectedColor="";
+
+
+// ===== LOAD CATEGORY =====
+function loadCategory(cat){
+    currentCategory=cat;
+    const container=document.getElementById('productContainer');
+    container.innerHTML='';
+    let list=(cat==='all')?[...products.men,...products.women]:products[cat]||[];
+    list.forEach((p,i)=>{
+        const card=document.createElement('div');
+        card.className='product';
+        card.innerHTML=`
+        <img src="${p.img}" onclick="openProductPopup('${cat}',${i})">
+        <h3>${p.name}</h3>
+        <p>$${p.price}</p>
+        <div class="btn-container">
+            <button onclick="addPopupToCart('${cat}',${i})">🛒 Add to Cart</button>
+            <span class="favorite-btn" onclick="toggleFavorite('${cat}',${i})">♡</span>
+        </div>`;
+        container.appendChild(card);
+    });
+}
+
+// ===== SEARCH =====
+document.getElementById('searchInput').addEventListener('input',function(){
+    const val=this.value.toLowerCase();
+    document.querySelectorAll('.product').forEach(c=>{
+        const name=c.querySelector('h3').textContent.toLowerCase();
+        c.style.display=name.includes(val)?'':'none';
+    });
+});
+
+// ===== POPUP =====
+function openProductPopup(cat,index){
+    currentPopupProduct=products[cat][index];
+    popupImgIndex=0;
+    document.getElementById('popupMainImg').src=currentPopupProduct.images[popupImgIndex]||currentPopupProduct.img;
+    document.getElementById('popupName').textContent=currentPopupProduct.name;
+    document.getElementById('popupPrice').textContent='$'+currentPopupProduct.price;
+    document.getElementById('imgCounter').textContent=`${popupImgIndex+1} of ${currentPopupProduct.images.length}`;
+    const colorDiv=document.getElementById('colorOptions');
+    colorDiv.innerHTML='';
+    (currentPopupProduct.colors||[]).forEach(c=>{
+        const span=document.createElement('span');
+        span.className='color-option';
+        span.style.backgroundColor=c.toLowerCase();
+        span.title=c;
+        span.onclick=function(){
+            document.querySelectorAll('.color-option').forEach(e=>e.classList.remove('selected'));
+            this.classList.add('selected');
+        };
+        colorDiv.appendChild(span);
+    });
+    document.getElementById('productPopup').style.display='flex';
+}
+function closeProductPopup(){document.getElementById('productPopup').style.display='none';}
+function outsideClick(e){if(e.target===document.getElementById('productPopup'))closeProductPopup();}
+function prevImg(){if(!currentPopupProduct)return; popupImgIndex=(popupImgIndex-1+(currentPopupProduct.images.length||1))%(currentPopupProduct.images.length||1); document.getElementById('popupMainImg').src=currentPopupProduct.images[popupImgIndex]||currentPopupProduct.img; document.getElementById('imgCounter').textContent=`${popupImgIndex+1} of ${currentPopupProduct.images.length}`;}
+function nextImg(){if(!currentPopupProduct)return; popupImgIndex=(popupImgIndex+1)%(currentPopupProduct.images.length||1); document.getElementById('popupMainImg').src=currentPopupProduct.images[popupImgIndex]||currentPopupProduct.img; document.getElementById('imgCounter').textContent=`${popupImgIndex+1} of ${currentPopupProduct.images.length}`;}
+
+// ===== CART & FAVORITES =====
+let cart=JSON.parse(localStorage.getItem('cart'))||[];
+let favorites=JSON.parse(localStorage.getItem('favorites'))||[];
+
+function addPopupToCart(cat,index){
+    const product=products[cat][index];
+    const selectedColor=document.querySelector('.color-option.selected')?.title;
+    const size=document.getElementById('popupSize').value;
+    if(!selectedColor||!size){ alert('Select color and size!'); return; }
+    cart.push({name:product.name,img:product.images[0]||product.img,price:product.price,color:selectedColor,size:size});
+    localStorage.setItem('cart',JSON.stringify(cart));
+    updateCounts();
+    alert(product.name+' added to cart!');
+}
+
+function toggleFavorite(cat,index){
+    const product=products[cat][index];
+    const found=favorites.find(f=>f.name===product.name);
+    if(found){
+        favorites=favorites.filter(f=>f.name!==product.name);
+        showFavPopup('Removed from favorites ❌');
+    } else {
+        favorites.push(product);
+        showFavPopup('Added to favorites ❤️');
+    }
+    localStorage.setItem('favorites',JSON.stringify(favorites));
+    updateCounts();
+}
+
+function showFavPopup(msg){
+    const popup=document.getElementById('favPopup');
+    popup.textContent=msg;
+    popup.style.display='block';
+    popup.style.opacity='1';
+    setTimeout(()=>{popup.style.opacity='0'; setTimeout(()=>popup.style.display='none',300);},2000);
+}
+
+function updateCounts(){
+    document.querySelector('.cart-count').textContent=cart.length;
+}
+
+window.onload=()=>{loadCategory('all'); updateCounts();}
+</script>
+
+</body>
+</html>

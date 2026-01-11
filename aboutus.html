@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - PhoneFit</title>
+<style>
+/* ================= GLOBAL ================= */
+* { box-sizing: border-box; margin:0; padding:0; }
+body, html { font-family: 'Roboto', sans-serif; background: #0b0e1a; color:#e5e7eb; }
+
+/* ================= HEADER ================= */
+header {
+  background: rgba(20,16,40,0.95);
+  border-bottom: 1px solid #2b2f55;
+  backdrop-filter: blur(6px);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 70px;
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 32px; /* isto kao Home */
+}
+
+nav li {
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+  color: #c7c9ff;
+  position: relative;
+}
+
+/* underline efekat kao Home */
+nav li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #8b5cf6;
+  transition: 0.3s;
+}
+
+nav li:hover {
+  color: #8b5cf6;
+}
+
+nav li:hover::after {
+  width: 100%;
+}
+
+
+/* ================= HERO ================= */
+.hero-about {
+  margin-top: 80px;
+  width: 100%;
+  min-height: 45vh;
+  background: url('uss.png') center/cover no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-about-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 3, 15, 0.45); /* tamni overlay da se tekst lepo vidi */
+}
+
+.hero-about h1 {
+  position: relative;
+  color: #a084fc;
+  font-size: 38px;
+  z-index: 2;
+  letter-spacing: 1px;
+}
+
+
+/* ================= ABOUT TEXT ================= */
+.about-text {
+  padding: 40px 50px;
+  max-width: 1000px;
+  margin:0 auto;
+  line-height:1.8;
+  color:#d1c4e9;
+}
+.about-text h2 { font-size:28px; color:#8b5cf6; margin-bottom:20px; text-align:center; }
+
+/* ================= CONTACT ICONS ================= */
+.contact-icons {
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin:30px 0;
+}
+.contact-icons a {
+  font-size: 28px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+/* pojedinačne boje */
+.contact-icons .fa-phone { color: #4ade80; }      /* zelena */
+.contact-icons .fa-envelope { color: #60a5fa; }   /* plava */
+.contact-icons .fa-instagram { color: #e1306c; }  /* instagram */
+.contact-icons .fa-tiktok { color: #ffffff; }     /* tik tok */
+
+/* hover efekat – blago svetlije */
+.contact-icons a:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;   /* 👉 ovo ga čini PODEBLJANIM */
+  color: #8b5cf6;     /* 👉 ovo je LJUBIČASTA boja */
+  letter-spacing: 1px;
+}
+
+
+/* ================= CATEGORY CARDS ================= */
+.categories {
+  display:flex;
+  flex-direction:column;
+  gap:40px;
+  padding:40px 20px;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.category-card {
+  display:flex;
+  background: rgba(25,15,50,0.85);
+  border-radius:14px;
+  overflow:hidden;
+  transition: transform 0.3s;
+}
+
+.category-card img {
+  width:300px;
+  height:220px;
+  object-fit:cover;
+}
+
+.category-card .text {
+  padding:25px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.category-card h3 { color:#a084fc; font-size:22px; margin-bottom:12px; }
+.category-card p { color:#d1c4e9; font-size:14px; line-height:1.6; }
+
+.category-card:hover { transform: translateY(-5px); box-shadow:0 8px 25px rgba(124,58,237,0.4); }
+
+/* ================= POPUP MODAL ================= */
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #1a103a, #0f0a25);
+  color: #d1c4e9;
+  padding: 40px 35px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 520px; /* VEĆI prozor */
+  z-index: 2000;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(124, 58, 237, 0.45);
+}
+
+.modal h3 {
+  color: #a084fc;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.modal p {
+  margin-bottom: 18px;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.modal .numbers {
+  text-align: left;
+  margin: 20px auto;
+  max-width: 320px;
+  font-size: 15px;
+}
+
+.modal button {
+  margin-top: 15px;
+  padding: 12px 26px;
+  background: linear-gradient(135deg, #7c3aed, #4c1d95);
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:1024px) {
+  .category-card { flex-direction:column; align-items:center; }
+  .category-card img { width:100%; height:auto; }
+  .category-card .text { text-align:center; padding:15px; }
+}
+@media (max-width:768px) {
+  header { padding:12px 20px; }
+  nav ul { gap:15px; flex-wrap:wrap; justify-content:center; }
+  .hero-about h1 { font-size:28px; }
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+#cart-count-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #f43f5e; /* crvena/ljubičasta */
+  color: white;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(255,0,0,0.5);
+  transition: 0.3s;
+}
+header {
+  background: rgba(20,16,40,0.95);
+  border-bottom: 1px solid #2b2f55;
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top:0;
+  z-index:1000;
+}
+
+.logo {
+  font-size:22px;
+  font-weight:700;
+  color:#8b5cf6;
+  letter-spacing:1px;
+}
+
+.top-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 30px;
+}
+
+.top-bar nav ul {
+  display:flex;
+  list-style:none;
+  gap:32px;
+  align-items:center;
+}
+
+.top-bar nav ul li {
+  position:relative;
+  cursor:pointer;
+  font-weight:500;
+  color:#c7c9ff;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.top-bar nav ul li:hover {
+  color:#8b5cf6;
+  text-shadow:0 0 8px rgba(139,92,246,0.9);
+}
+
+.top-bar nav ul li::after {
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:#8b5cf6;
+  transition:width 0.3s;
+}
+
+.top-bar nav ul li:hover::after {
+  width:100%;
+}
+
+.cart-badge span, .favorites-badge span {
+  position:absolute;
+  top:-8px;
+  right:-10px;
+  background:#dc2626;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  border-radius:50%;
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .top-bar { flex-direction: column; gap:12px; }
+  .top-bar nav ul { flex-wrap:wrap; gap:16px; justify-content:center; }
+}
+@media (max-width: 480px) {
+  body {
+    transform: scale(0.75);
+    transform-origin: top center;
+    width: 133%;
+    overflow-x: hidden;
+  }
+}
+
+
+</style>
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+
+<header>
+  <div class="logo">PhoneFit</div>
+  <nav>
+    <ul>
+      <li>
+  <a href="index.html" style="text-decoration:none; color:inherit;">
+    Home
+  </a>
+</li>
+
+      <li onclick="goToAbout()">About Us</li>
+      <li onclick="goToShop()">Shop</li>
+      <li class="favorites-badge" onclick="goToFavorites()">
+          ❤️ Favorites<span id="favorites-count">0</span>
+        </li>
+      <li onclick="goToCart()" class="cart-icon">
+  🛒 Cart
+  <span id="cart-count-badge">0</span>
+</li>
+
+    </ul>
+  </nav>
+</header>
+
+<div class="hero-about">
+  <div class="hero-about-overlay"></div>
+  <h1>About Us</h1>
+</div>
+
+<div class="about-text">
+  <h2>Welcome to PhoneCases Shop </h2>
+  <p>We are passionate about providing high-quality phone accessories for everyone. Our categories include products for men, women, phone holders, headphones, phone cases, and screen protectors. Every product is carefully selected to meet your style and protection needs. Explore our website to find the perfect accessory for your lifestyle and enjoy hassle-free shopping with our fast shipping and excellent customer support.</p>
+
+  <div class="contact-icons">
+    <a onclick="showPhones()"><i class="fas fa-phone"></i></a>
+    <a onclick="showEmail()"><i class="fas fa-envelope"></i></a>
+    <a href="https://www.instagram.com/phonefitshop" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.tiktok.com/@phonefitshop" target="_blank"><i class="fab fa-tiktok"></i></a>
+  </div>
+</div>
+
+<div class="categories">
+  <div class="category-card">
+    <img src="menc.png" alt="Men Phone Cases">
+    <div class="text">
+      <h3>Men Phone Cases</h3>
+      <p>Stylish and durable phone cases for men. Protect your device with premium materials. Available in multiple colors and styles to match your fashion. Our Men Phone Cases are designed to combine protection with trendsetting designs, ensuring your phone stands out while staying safe.</p>
+    </div>
+  </div>
+  <div class="category-card">
+    <img src="womenc.png" alt="Women Phone Cases">
+    <div class="text">
+      <h3>Women Phone Cases</h3>
+      <p>Elegant and protective phone cases for women. Designed for comfort and style, ensuring your phone is safe while looking fashionable. Browse our Women Phone Cases to find colors and patterns that express your personality while keeping your device secure.</p>
+    </div>
+  </div>
+  <div class="category-card">
+    <img src="phoneholdersc.png" alt="Phone Holders">
+    <div class="text">
+      <h3>Phone Holders</h3>
+      <p>Practical holders to keep your phone safe. Durable and versatile, perfect for cars, desks, or anywhere you need hands-free convenience. Our holders ensure your device is always accessible and protected.</p>
+    </div>
+  </div>
+  <div class="category-card">
+    <img src="headphonesc.png" alt="Headphones">
+    <div class="text">
+      <h3>Headphones</h3>
+      <p>High-quality audio for your phone experience. Comfortable and stylish designs to enjoy music, calls, or gaming anywhere. Experience crystal-clear sound and durable build with our headphones.</p>
+    </div>
+  </div>
+  <div class="category-card">
+    <img src="headphonescasec.png" alt="Cases">
+    <div class="text">
+      <h3>Cases</h3>
+      <p>Variety of cases to protect your devices. From rugged to sleek designs, find the perfect fit for your lifestyle. Our cases provide optimal protection without compromising on style.</p>
+    </div>
+  </div>
+  <div class="category-card">
+    <img src="screenprotectorsc.png" alt="Screen Protectors">
+    <div class="text">
+      <h3>Screen Protectors</h3>
+      <p>Keep your phone screens scratch-free and safe. High-quality tempered glass or film options for ultimate protection. Our screen protectors are easy to install and preserve touchscreen sensitivity.</p>
+    </div>
+  </div>
+</div>
+
+<!-- POPUPS -->
+<div id="phoneModal" class="modal">
+  <h3>Contact Us by Phone</h3>
+  <p>
+    If you would like to contact us, feel free to call us on one of the numbers
+    below depending on your country.
+  </p>
+
+  <div class="numbers">
+    🇧🇬 Bulgaria: +359 88 123 4567<br>
+    🇷🇸 Serbia: +381 64 987 6543<br>
+    🇷🇴 Romania: +40 721 456 789<br>
+    🇩🇪 Germany: +49 30 123456
+  </div>
+
+  <button onclick="closeModal('phoneModal')">Close</button>
+</div>
+
+
+<div id="emailModal" class="modal">
+  <h3>Contact Us by Email</h3>
+  <p>
+    If you would like to order a product or need additional information about
+    our shop, do not hesitate to contact us.
+  </p>
+
+  <p style="margin-top:10px;">
+    Write to us directly at:<br>
+    <strong style="color:#a084fc;">Phonecases@gmail.com</strong>
+  </p>
+
+  <button onclick="sendDirectEmail()">Send Email</button>
+  <br><br>
+  <button onclick="closeModal('emailModal')">Close</button>
+</div>
+
+<script>
+function goToHome(){ window.location.href='home.html'; }
+function goToAbout(){ window.location.href='aboutus.html'; }
+function goToShop(){ window.location.href='shop.html'; }
+function goToFavorites(){ window.location.href='favorites.html'; }
+function goToCart(){ window.location.href='cart.html'; }
+
+function showPhones(){
+  document.getElementById('phoneModal').style.display = 'block';
+}
+function showEmail(){
+  document.getElementById('emailModal').style.display = 'block';
+}
+function closeModal(id){
+  document.getElementById(id).style.display = 'none';
+}
+
+function sendDirectEmail() {
+  window.location.href = "mailto:Phonecases@gmail.com";
+}
+// Funkcija za update cart badge
+function updateCartCountBadge() {
+    const badge = document.getElementById('cart-count-badge');
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    badge.textContent = cart.length;
+}
+
+// Pozovi funkciju pri load-u stranice
+window.addEventListener('load', updateCartCountBadge);
+
+window.addEventListener('load', () => {
+    updateCartCountBadge();
+	updateFavoritesCountBadge();
+});
+
+// Primer kada dodaš proizvod
+cart.push(product);
+localStorage.setItem('cart', JSON.stringify(cart));
+updateCartCountBadge();  // <--- ovde
+// Primer kada ukloniš proizvod
+cart = cart.filter(c => c.name !== product.name);
+localStorage.setItem('cart', JSON.stringify(cart));
+updateCartCountBadge();  // <--- ovde
+
+
+function updateFavoritesCountBadge() {
+    const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    document.getElementById('favorites-count').innerText = favs.length;
+}
+
+function addToCart(product){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCountBadge();
+    showToast('Added to cart 🛒');
+}
+
+function removeFromCart(product){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(p => p.name !== product.name);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCountBadge();
+    showToast('Removed from cart 🛒');
+}
+
+function addToFavorites(product){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    favs.push(product);
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    updateFavoritesCountBadge();
+    showToast('Added to favorites ❤️');
+}
+
+function removeFromFavorites(product){
+    let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+    favs = favs.filter(p => p.name !== product.name);
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    updateFavoritesCountBadge();
+    showToast('Removed from favorites ❤️');
+}
+
+// ==================== AUTO UPDATE ACROSS TABS ====================
+// Ako korisnik otvori više taba, brojač se menja odmah
+window.addEventListener('storage', (e) => {
+    if(e.key === 'cart') updateCartCountBadge();
+    if(e.key === 'favorites') updateFavoritesCountBadge();
+});
+
+// ==================== TOAST ====================
+function showToast(msg){
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerText = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.classList.add('show'), 50);
+    setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 300);
+    }, 2000);
+}
+</script>
+
+</body>
+</html>
